@@ -5,8 +5,7 @@ app = FastAPI()
 
 # Backend service mappings
 BACKENDS = {
-    "service1": "http://localhost:8001",
-    "service2": "http://localhost:8002",
+    "service1": "http://localhost:8001"
 }
 
 async def proxy_request(service_url: str, request: Request):
