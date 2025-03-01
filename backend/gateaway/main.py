@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, HTTPException, Response
+from fastapi import FastAPI, Request
 import httpx
 
 app = FastAPI()
@@ -17,7 +17,6 @@ async def proxy_request(url: str, request: Request, body: bytes):
             headers=request.headers.raw,
             content=body 
         )
-        
         try:
             response_data = response.json()
         except Exception as e:
