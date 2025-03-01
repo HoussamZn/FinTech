@@ -1,34 +1,35 @@
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Response
 import httpx
 
 app = FastAPI()
 
 # Backend service mappings
 BACKENDS = {
-    "service1": "http://localhost:8001"
+    "user": "http://localhost:8001"
 }
 
-async def proxy_request(service_url: str, request: Request):
-    """Forward the request to the backend service"""
+async def proxy_request(url: str, request: Request, body: bytes):
     async with httpx.AsyncClient() as client:
+        # Forward the request with the body to the backend
+        response = await client.request(
+            method=request.method,
+            url=url,
+            headers=request.headers.raw,
+            content=body 
+        )
+        
         try:
-            response = await client.request(
-                method=request.method,
-                url=f"{service_url}{request.url.path.replace('/' + request.path_params['service'], '')}",
-                headers={key: value for key, value in request.headers.items() if key != "host"},
-                content=await request.body(),
-                params=request.query_params
-            )
-            return response
-        except httpx.RequestError as e:
-            raise HTTPException(status_code=502, detail=f"Backend service error: {str(e)}")
+            response_data = response.json()
+        except Exception as e:
+            response_data = {"error": "Failed to serialize response from backend"}
 
-@app.api_route("/{service}/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
-async def gateway(service: str, path: str, request: Request):
-    """Route request to appropriate backend service"""
-    if service in BACKENDS:
-        backend_url = BACKENDS[service]
-        proxied_response = await proxy_request(backend_url, request)
-        return proxied_response.json()
+        return response_data
+
+@app.api_route("/{service:path}/{path:path}", methods=["POST", "PUT","GET"])
+async def gateway(request: Request, path: str,service:str):
+    backend_url = f"{BACKENDS[service]}/{path}"
     
-    raise HTTPException(status_code=404, detail="Service not found")
+    # Read the body from the incoming request
+    body = await request.body()
+
+    return await proxy_request(backend_url, request, body)

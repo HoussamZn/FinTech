@@ -1,3 +1,9 @@
 fastapi
 uvicorn
 httpx
+bcrypt
+cryptography
+python-jose
+python-multipart
+sqlalchemy
+passlib
