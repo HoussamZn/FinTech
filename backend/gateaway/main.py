@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 import httpx
 
 app = FastAPI()
@@ -7,28 +8,21 @@ app = FastAPI()
 BACKENDS = {
     "user": "http://localhost:8001"
 }
-
-async def proxy_request(url: str, request: Request, body: bytes):
-    async with httpx.AsyncClient() as client:
-        # Forward the request with the body to the backend
-        response = await client.request(
-            method=request.method,
-            url=url,
-            headers=request.headers.raw,
-            content=body 
-        )
-        try:
-            response_data = response.json()
-        except Exception as e:
-            response_data = {"error": "Failed to serialize response from backend"}
-
-        return response_data
-
-@app.api_route("/{service:path}/{path:path}", methods=["POST", "PUT","GET"])
-async def gateway(request: Request, path: str,service:str):
-    backend_url = f"{BACKENDS[service]}/{path}"
     
-    # Read the body from the incoming request
-    body = await request.body()
+async def forward_request(service_url: str, method: str, path: str, body=None, headers=None):
+    async with httpx.AsyncClient() as client:
+        url = f"{service_url}{path}"
+        response = await client.request(method, url, content=body, headers=headers)
+        return response
 
-    return await proxy_request(backend_url, request, body)
+@app.api_route("/{service}/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
+async def gateway(service: str, path: str, request: Request):
+    if service not in BACKENDS:
+        raise HTTPException(status_code=404, detail="Service not found")
+
+    service_url = BACKENDS[service]
+    body = await request.body() if request.method in ["POST", "PUT", "PATCH"] else None
+    headers = dict(request.headers)
+    response = await forward_request(service_url, request.method, f"/{path}", body, headers)
+
+    return JSONResponse(status_code=response.status_code, content=response.json())

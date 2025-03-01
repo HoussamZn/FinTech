@@ -20,20 +20,29 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
 
+def get_user_by_email(db: Session, email: str):
+    return db.query(User).filter(User.email == email).first()
+
+def get_user_by_CIN(db: Session, CIN: str):
+    return db.query(User).filter(User.CIN == CIN).first()
+
 #create the new user
 def create_user(db: Session, user: UserCreate):
     hashed_password = pwd_context.hash(user.password)
-    db_user = User(username=user.username, hashed_password=hashed_password)
+    user_dict = user.model_dump()
+    user_dict["password"] = hashed_password
+
+    db_user = User(**user_dict)
     db.add(db_user)
     db.commit()
-    return {"message": "User registered successfully!"}
+    return {"message": f"User : {db_user.username} registered successfully!"}
 
 # Authenticate the user
 def authenticate_user(username: str, password: str, db: Session):
     user = db.query(User).filter(User.username == username).first()
     if not user:
         return False
-    if not pwd_context.verify(password, user.hashed_password):
+    if not pwd_context.verify(password, user.password):
         return False
     return user
 
@@ -57,3 +66,5 @@ def verify_token(token: str = Depends(oauth2_scheme)):
         return payload
     except JWTError:
         raise HTTPException(status_code=403, detail="Token is invalid or expired")
+    
+
