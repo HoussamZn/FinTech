@@ -6,7 +6,8 @@ app = FastAPI()
 
 # Backend service mappings
 BACKENDS = {
-    "user": "http://localhost:8001"
+    "user": "http://localhost:8001",
+    'account': "http://localhost:8002"
 }
     
 async def forward_request(service_url: str, method: str, path: str, body=None, headers=None):

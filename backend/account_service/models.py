@@ -40,8 +40,8 @@ class BankAccount(Base):
     user_id = Column(Integer,nullable=False)
     bank_name = Column(Enum(BankName),nullable=False)
 
-    sent_transactions = relationship("Transaction",back_populates="sender_account",foreign_keys="[Transaction.sender_id]")
-    received_transactions = relationship("Transaction",back_populates="receiver_account",foreign_keys="[Transaction.receiver_id]")
+    sent_transactions = relationship("Transaction",back_populates="sender_account",foreign_keys="[Transaction.sender_account_id]")
+    received_transactions = relationship("Transaction",back_populates="receiver_account",foreign_keys="[Transaction.receier_account_id]")
 
 class Transaction(Base):
     __tablename__ = "transactions"
@@ -64,13 +64,14 @@ class BankAccountCreate(BaseModel):
     account_number: str
     user_id : int
     bank_name : BankName
-    currency : Optional[Currency]
+    currency : Optional[Currency] = None
 
 class TransactionCreate(BaseModel):
-    account_number: str
-    user_id : int
-    bank_name : BankName
-    currency : Optional[Currency]
+    amount: float
+    transaction_type : TransactionType
+    sender_account_id : int
+    receier_account_id : Optional[int] = None
+    receiver_account_number : Optional[str] = None
 
 
 
