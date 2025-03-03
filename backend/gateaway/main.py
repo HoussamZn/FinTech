@@ -9,7 +9,8 @@ app = FastAPI()
 # Backend service mappings
 BACKENDS = {
     "user": "http://localhost:8001",
-    'account': "http://localhost:8002"
+    'account': "http://localhost:8002",
+    "bank" : "http://localhost:8003"
 }
 
 class UserCreate(BaseModel):
@@ -23,6 +24,19 @@ async def forward_request(service_url: str, method: str, path: str, body=None, h
         url = f"{service_url}{path}"
         response = await client.request(method, url, content=body, headers=headers)
         return response
+
+async def verify_token(request: Request):
+    authorization = request.headers.get("Authorization")
+    if not authorization:
+        raise HTTPException(status_code=400, detail="Authorization header missing")
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"{BACKENDS['user']}/verify-token", headers={"Authorization": authorization})
+
+    if response.status_code != 200:
+        raise HTTPException(status_code=response.status_code, detail="Invalid token")
+    
+    return response.json()  
 
 @app.post("/register")
 async def register(request:Request):
@@ -39,28 +53,13 @@ async def get_token(request:Request):
 
     return JSONResponse(status_code=response.status_code, content=response.json())
 
-
-async def verify_token(request: Request):
-    authorization = request.headers.get("Authorization")
-    if not authorization:
-        raise HTTPException(status_code=400, detail="Authorization header missing")
-
-    async with httpx.AsyncClient() as client:
-        response = await client.get(f"{BACKENDS['user']}/verify-token", headers={"Authorization": authorization})
-
-    if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail="Invalid token")
-    
-    return response.json()  
-
-
 @app.api_route("/{service}/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
 async def gateway(service: str, path: str, request: Request):
     if service not in BACKENDS:
         raise HTTPException(status_code=404, detail="Service not found")
     
     token_data = await verify_token(request)
-    
+
     service_url = BACKENDS[service]
     body = await request.body() if request.method in ["POST", "PUT", "PATCH"] else None
     headers = dict(request.headers)

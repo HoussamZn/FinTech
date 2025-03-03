@@ -1,10 +1,15 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String,Enum
 from pydantic import BaseModel,EmailStr
 from typing import Optional
+import enum
 
 
 from database import Base
 
+
+class UserType(str,enum.Enum):
+    CLIENT = 'CLIENT'
+    ADMIN = 'ADMIN'
 class User(Base):
     __tablename__ = "users"
 
@@ -13,7 +18,7 @@ class User(Base):
     password = Column(String)
     email = Column(String , unique=True)
     CIN = Column(String,unique=True,nullable=True)
-    #type
+    type = Column(Enum(UserType),default=UserType.CLIENT)
 
 #register schema
 class UserCreate(BaseModel):
@@ -21,4 +26,5 @@ class UserCreate(BaseModel):
     password: str
     email: EmailStr
     CIN: Optional[str] = None
+    type : Optional[UserType] = None
 

@@ -36,25 +36,3 @@ def create_acc(transaction:TransactionCreate,db: Session = Depends(get_db)):
     db.commit()
     return {"message": f"transaction : {db_acc} created successfully!"}
 
-
-
-import httpx
-from pydantic import BaseModel,EmailStr
-from typing import Optional
-class UserCreate(BaseModel):
-    username: str
-    password: str
-    email: EmailStr
-    CIN: Optional[str] = None
-
-
-async def call_service_b(data):
-    async with httpx.AsyncClient() as client:
-        response = await client.request("POST", "http://localhost:8000/user/register", json=data.dict())
-
-        return response.json()
-
-
-@router.post("/user")
-async def gateway(data:UserCreate):
-    return await call_service_b(data)
