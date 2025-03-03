@@ -13,6 +13,7 @@ class User(Base):
     password = Column(String)
     email = Column(String , unique=True)
     CIN = Column(String,unique=True,nullable=True)
+    #type
 
 #register schema
 class UserCreate(BaseModel):

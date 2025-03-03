@@ -1,11 +1,10 @@
 from sqlalchemy import Column, Integer, String,Date,Enum,Float,ForeignKey
-from pydantic import BaseModel,EmailStr
+from pydantic import BaseModel
 from typing import Optional
 from sqlalchemy.sql import func
 from datetime import date,timedelta
 import enum
 from sqlalchemy.orm import relationship
-
 
 from database import Base
 
