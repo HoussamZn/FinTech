@@ -13,15 +13,15 @@ extra/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+front/node_modules
+front/.pnp
 .pnp.js
 
 # testing
-/coverage
+front/coverage
 
 # production
-/build
+front/build
 
 # misc
 .DS_Store
