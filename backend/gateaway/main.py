@@ -59,6 +59,12 @@ async def register(request:Request):
 
     return JSONResponse(status_code=response.status_code, content=response.json())
 
+@app.get("/verify-token")
+async def verify_token(request:Request):
+    response = await forward_request(BACKENDS["user"], request.method, "/verify-token",headers=request.headers)
+
+    return JSONResponse(status_code=response.status_code, content=response.json())
+
 @app.post("/login")
 async def get_token(request:Request):
     body = await request.body()

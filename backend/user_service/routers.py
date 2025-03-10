@@ -39,14 +39,15 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(data={"sub": user.username}, expires_delta=access_token_expires)
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"user":user ,"access_token": access_token, "token_type": "bearer"}
 
 @router.get("/verify-token")
-async def verify_user_token(authorization: str = Header(None)):
+async def verify_user_token(authorization: str = Header(None),db: Session = Depends(get_db)):
     if not authorization:
         raise HTTPException(status_code=400, detail="Authorization header missing")
 
     token = authorization.replace("Bearer ", "")  # Remove "Bearer " prefix
     username = verify_token(token=token)
     username = username.get("sub")
-    return {"message": f"Token is valid, Username: {username}"}
+    user = get_user_by_username(db,username=username)
+    return {"message": "Token is valid, Username:",'user': user}
