@@ -9,6 +9,7 @@ from services import UserCreate,get_user_by_username,get_user_by_email,get_user_
 
 router = APIRouter()
 
+
 @router.post("/register")
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = get_user_by_username(db, username=user.username)

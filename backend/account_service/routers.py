@@ -8,6 +8,7 @@ from database import get_db
 router = APIRouter()
 BACKENDS = {
     "user": "http://localhost:8001",
+    "bank":"http://localhost:8003",
     'gateaway': "http://localhost:8000"
 }
 

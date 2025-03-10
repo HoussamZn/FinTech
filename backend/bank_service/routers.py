@@ -8,6 +8,7 @@ from database import get_db
 router = APIRouter()
 BACKENDS = {
     "user": "http://localhost:8001",
+    "account":"http://localhost:8002",
     'gateaway': "http://localhost:8000"
 }
 
@@ -15,5 +16,6 @@ BACKENDS = {
 @router.get("/")
 def home():
     return {"message": "Service Bank responding"}
+
 
 

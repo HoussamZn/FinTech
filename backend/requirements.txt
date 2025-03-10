@@ -8,3 +8,4 @@ python-multipart
 sqlalchemy
 passlib
 pydantic[email]
+websockets
