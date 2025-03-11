@@ -1,11 +1,46 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState ,useEffect} from "react";
 
 const AuthContext = createContext();
 const LOGIN_API = "http://127.0.0.1:8000/login"
+const CHECK_API = "http://127.0.0.1:8000/verify-token"
+
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState("");
+
+    // Check for existing token on app load
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            fetchUserProfile(token);
+        }
+    }, []);
+
+
+    // Fetch user data using the stored token
+    const fetchUserProfile = async (token) => {
+        try {
+            const response = await fetch(CHECK_API, {
+                method: "GET",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}` 
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data.user);
+            } else {
+                console.log("logged out")
+                logout(); // Invalid token, clear storage
+            }
+        } catch (error) {
+            console.error("Error fetching user profile:", error);
+            logout();
+        }
+    };
 
 
     // Login function
@@ -42,7 +77,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout , error}}>
+        <AuthContext.Provider value={{ user, login, logout , error,fetchUserProfile}}>
             {children}
         </AuthContext.Provider>
     );
