@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+    --font-sans: InterVariable, sans-serif;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* In your CSS file */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+  
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+  
