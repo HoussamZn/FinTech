@@ -1,15 +1,14 @@
 import { createContext, useContext, useState ,useEffect} from "react";
 
 const AuthContext = createContext();
-const LOGIN_API = "http://127.0.0.1:8000/login"
-const CHECK_API = "http://127.0.0.1:8000/verify-token"
+const LOGIN_API = "http://192.168.1.182:8000/login"
+const CHECK_API = "http://192.168.1.182:8000/verify-token"
 
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState("");
 
-    // Check for existing token on app load
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -18,7 +17,6 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
 
-    // Fetch user data using the stored token
     const fetchUserProfile = async (token) => {
         try {
             const response = await fetch(CHECK_API, {
@@ -38,7 +36,6 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             console.error("Error fetching user profile:", error);
-            logout();
         }
     };
 

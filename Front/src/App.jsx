@@ -3,6 +3,7 @@ import Hero from "./assets/components/Hero/Hero";
 import Settings from "./assets/components/dashboard/settings";
 import Transactions from "./assets/components/dashboard/Transactions";
 import './App.css'
+import { useEffect } from "react";
 
 
 
@@ -13,7 +14,16 @@ import { AuthProvider } from "./assets/utils/AuthContext";
 import ProtectedRoute from "./assets/utils/ProtectedRoute";
 
 
-function App() {
+function App() {  
+  useEffect(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    if (savedMode !== null) {
+      document.documentElement.classList.toggle('dark', savedMode === 'true');
+    }else{
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.toggle('dark', systemPrefersDark);
+    }
+  }, []);
 
   return (
     <AuthProvider>
