@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState("");
 
-    // Check for existing token on app load
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -18,7 +17,6 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
 
-    // Fetch user data using the stored token
     const fetchUserProfile = async (token) => {
         try {
             const response = await fetch(CHECK_API, {
@@ -38,7 +36,6 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             console.error("Error fetching user profile:", error);
-            logout();
         }
     };
 

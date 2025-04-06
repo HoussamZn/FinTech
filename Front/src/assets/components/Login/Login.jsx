@@ -1,7 +1,23 @@
 import { useState } from "react";
+import { useAuth } from "../../utils/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Login({inLogin}) {
   const [isSignUp, setIsSignUp] = useState(!inLogin);
+
+  const [credentials, setCredentials] = useState({ username: "", password: "" });
+    const authContext = useAuth();
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setCredentials({ ...credentials, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await authContext.login(credentials);
+        navigate("/dash"); // Redirect on successful login
+    };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-5 lg:px-2">
@@ -38,11 +54,12 @@ export default function Login({inLogin}) {
             <div className="mt-2">
               <input
                 id="email"
-                name="email"
                 type="email"
                 required
                 placeholder="email@email.mail"
                 className="block w-full rounded-md bg-neutral-200 dark:bg-neutral-900/80 px-3 py-1.5 text-base text-neutral-900 dark:text-neutral-50 placeholder:text-neutral-900/30 dark:placeholder:text-neutral-50/30  focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                name="username"
+                onChange={handleChange}
                 />
             </div>
           </div>
@@ -54,11 +71,12 @@ export default function Login({inLogin}) {
             <div className="mt-2">
               <input
                 id="password"
-                name="password"
                 type="password"
                 required
                 placeholder="**********"
                 className="block w-full rounded-md bg-neutral-200 dark:bg-neutral-900/80 px-3 py-1.5 text-base text-neutral-900 dark:text-neutral-50 placeholder:text-neutral-900/30 dark:placeholder:text-neutral-50/30  focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                name="password"
+                onChange={handleChange}
                 />
             </div>
           </div>
@@ -67,6 +85,7 @@ export default function Login({inLogin}) {
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-neutral-50 shadow-xs duration-200 hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={handleSubmit}
             >
               {isSignUp ? "Sign Up" : "Sign In"}
             </button>

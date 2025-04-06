@@ -9,12 +9,16 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000" # Adjust the port if your frontend runs on a different one
+    "http://localhost:3000",
+    "http://localhost:5173",
+    'http://192.168.56.1:5173',
+    "http://192.168.56.1:5173/",
+    'http://192.168.1.182'
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Allows all origins from the list
+    allow_origins=['*'],  # Allows all origins from the list
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
