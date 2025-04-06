@@ -1,8 +1,8 @@
 import { createContext, useContext, useState ,useEffect} from "react";
 
 const AuthContext = createContext();
-const LOGIN_API = "http://192.168.1.182:8000/login"
-const CHECK_API = "http://192.168.1.182:8000/verify-token"
+const LOGIN_API = "http://127.0.0.1:8000/login"
+const CHECK_API = "http://127.0.0.1:8000/verify-token"
 
 
 export const AuthProvider = ({ children }) => {
