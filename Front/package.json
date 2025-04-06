@@ -14,6 +14,7 @@
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.0.15",
     "apexcharts": "^4.5.0",
+    "axios": "^1.8.4",
     "lucide-react": "^0.484.0",
     "react": "^19.0.0",
     "react-apexcharts": "^1.7.0",
