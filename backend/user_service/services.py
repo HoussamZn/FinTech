@@ -5,7 +5,7 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 
-from models import User,UserCreate
+from models import User,UserCreate,UserUpdate,UserPassword
 
 #auth
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -19,6 +19,9 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
+
+def get_user_by_id(db: Session, id: str):
+    return db.query(User).filter(User.id == id).first()
 
 def get_user_by_email(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
@@ -35,7 +38,34 @@ def create_user(db: Session, user: UserCreate):
     db_user = User(**user_dict)
     db.add(db_user)
     db.commit()
+    db.refresh(db_user)
     return {"message": f"User : {db_user.username} registered successfully!"}
+
+#update info
+def update_user(db: Session,user:User, updated: UserUpdate):
+    updated_dict = updated.model_dump(exclude_unset=True)
+    
+    for key, value in updated_dict.items():
+        setattr(user, key, value)
+
+    db.commit()
+    db.refresh(user)
+    return {"message": "Info updated successfully!"}
+
+#update passowrd
+def update_password(db: Session,user:User, data: UserPassword):
+    if not pwd_context.verify(data.password, user.password):
+        return False
+    hashed_password = pwd_context.hash(data.new_password)
+    user.password = hashed_password
+    db.commit()
+    db.refresh(user)
+    return {"message": "Password updated successfully!"}
+
+def delete_user(db: Session,user:User):
+    db.delete(user)
+    db.commit()
+    return {"message": "User deleted successfully"}
 
 # Authenticate the user
 def authenticate_user(username: str, password: str, db: Session):
@@ -56,6 +86,8 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+
 
 def verify_token(token: str = Depends(oauth2_scheme)):
     try:

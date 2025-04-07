@@ -1,13 +1,17 @@
 import { createContext, useContext, useState ,useEffect} from "react";
 
 const AuthContext = createContext();
-const LOGIN_API = "http://192.168.1.182:8000/login"
-const CHECK_API = "http://192.168.1.182:8000/verify-token"
+const GATEAWAY = "http://127.0.0.1:8000";
+const LOGIN_API = GATEAWAY + "/login";
+const CHECK_API = GATEAWAY + "/verify-token";
+const REGISTER_API = GATEAWAY + "/register";
+
 
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState("");
+    
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -39,6 +43,33 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    //Register fun
+    const register = async(credentials) => {
+        const { password2, ...sendCredentials } = credentials;
+        const jsonToSend = JSON.stringify(sendCredentials); 
+        try {
+            const response = await fetch(REGISTER_API, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',  // Ensure the server knows you're sending JSON
+                },
+                body: jsonToSend,
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                setError("");
+                const { username, password } = credentials;
+                return login({ username, password })
+            } else {
+                setError({type:"error",message:data.detail});
+                throw new Error(data.detail);
+            }
+        } catch (error) {
+            console.error("Register failed:", error);
+        }
+    }
+
 
     // Login function
     const login = async (credentials) => {
@@ -58,8 +89,9 @@ export const AuthProvider = ({ children }) => {
                 setUser(data.user);
                 localStorage.setItem("token", data.access_token); // Save token
                 setError("");
+                return true;
             } else {
-                setError(data.detail);
+                setError({type:"error",message:data.detail});
                 throw new Error(data.detail);
             }
         } catch (error) {
@@ -74,7 +106,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout , error,fetchUserProfile}}>
+        <AuthContext.Provider value={{ user, login, logout , error,setError,fetchUserProfile , register}}>
             {children}
         </AuthContext.Provider>
     );

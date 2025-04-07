@@ -25,7 +25,7 @@ const navigationLeft = [
 
 
 function Navbar({isNotHero, isOpen,setIsOpen,setSide ,inLogin , setInLogin}) {
-    const { user,logout } = useAuth();
+    const { user,logout,setError } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);  
     const [isScrolled, setIsScrolled] = useState(false);
@@ -56,10 +56,12 @@ function Navbar({isNotHero, isOpen,setIsOpen,setSide ,inLogin , setInLogin}) {
     }
 
     function close() {
-        setIsOpen(false)
+        setError(null);
+        setIsOpen(false);
     }
 
     return (
+        <>
         <header className={`fixed inset-x-0 top-0 z-20 transition-all duration-200 ${navbarBgClass}`}>
             {/* the bar */}
             <nav aria-label="Global" className="flex items-center justify-between p-4 lg:px-8">
@@ -191,7 +193,7 @@ function Navbar({isNotHero, isOpen,setIsOpen,setSide ,inLogin , setInLogin}) {
                             ))}
                             </div>
                             {/* auth needed items */}
-                            <div className="space-y-2 py-6">
+                            {user && <div className="space-y-2 py-6">
                             {navigationLeft.map((item) => (
                                 <a
                                 key={item.name}
@@ -201,16 +203,24 @@ function Navbar({isNotHero, isOpen,setIsOpen,setSide ,inLogin , setInLogin}) {
                                 {item.name}
                                 </a>
                             ))}
-                            </div>
+                            </div>}
 
                             {/* Login button */}
                             <div className="py-6">
+                                {user ? 
                                 <a
-                                    onClick={openFromMobile}
+                                    onClick={logout}
                                     className="-mx-3 flex justify-center rounded-lg text-base/7 font-semibold duration-200 text-neutral-900 dark:text-neutral-50 hover:text-indigo-600 hover:-translate-y-0.5 cursor-pointer"
+                                >
+                                    Log out
+                                </a>:
+                                <a
+                                onClick={openFromMobile}
+                                className="-mx-3 flex justify-center rounded-lg text-base/7 font-semibold duration-200 text-neutral-900 dark:text-neutral-50 hover:text-indigo-600 hover:-translate-y-0.5 cursor-pointer"
                                 >
                                     Log in
                                 </a>
+                                }
                             </div>
                         </div>
 
@@ -231,6 +241,7 @@ function Navbar({isNotHero, isOpen,setIsOpen,setSide ,inLogin , setInLogin}) {
                 </div>
             )}
         </header>
+        </>
   )
 }
 

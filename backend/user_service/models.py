@@ -19,12 +19,26 @@ class User(Base):
     email = Column(String , unique=True)
     CIN = Column(String,unique=True,nullable=True)
     type = Column(Enum(UserType),default=UserType.CLIENT)
+    number = Column(String,unique=True,nullable=True)
 
 #register schema
 class UserCreate(BaseModel):
     username: str
     password: str
-    email: EmailStr
+    email: str
     CIN: Optional[str] = None
     type : Optional[UserType] = None
+    number: Optional[str] = None
 
+
+class UserUpdate(BaseModel):
+    id:int
+    username: str
+    email: str
+    CIN: Optional[str] = None
+    number: Optional[str] = None
+
+class UserPassword(BaseModel):
+    id:int
+    password : str
+    new_password : str
