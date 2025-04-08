@@ -31,11 +31,6 @@ BACKENDS = {
     "bank" : "http://localhost:8003"
 }
 
-class UserCreate(BaseModel):
-    username: str
-    password: str
-    email: EmailStr
-    CIN: Optional[str] = None
 
 async def forward_request(service_url: str, method: str, path: str, body=None, headers=None):
     async with httpx.AsyncClient() as client:
@@ -43,7 +38,7 @@ async def forward_request(service_url: str, method: str, path: str, body=None, h
         response = await client.request(method, url, content=body, headers=headers)
         return response
 
-async def verify_token(request: Request):
+async def verify_token_(request: Request):
     authorization = request.headers.get("Authorization")
     if not authorization:
         raise HTTPException(status_code=400, detail="Authorization header missing")
@@ -52,7 +47,7 @@ async def verify_token(request: Request):
         response = await client.get(f"{BACKENDS['user']}/verify-token", headers={"Authorization": authorization})
 
     if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail="Invalid token")
+        raise HTTPException(status_code=response.status_code, detail=response.json().get("detail"))
     
     return response.json()  
 
@@ -82,10 +77,11 @@ async def gateway(service: str, path: str, request: Request):
     if service not in BACKENDS:
         raise HTTPException(status_code=404, detail="Service not found")
     
-    token_data = await verify_token(request)
+    await verify_token_(request)
+
 
     service_url = BACKENDS[service]
-    body = await request.body() if request.method in ["POST", "PUT", "PATCH"] else None
+    body = await request.body() if request.method in ["POST", "PUT", "PATCH",'DELETE'] else None
     headers = dict(request.headers)
     response = await forward_request(service_url, request.method, f"/{path}", body, headers)
 

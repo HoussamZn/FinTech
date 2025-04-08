@@ -32,6 +32,7 @@ class BankAccount(Base):
     __tablename__ = "bank_accounts"
 
     id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
     account_number = Column(String, unique=True,nullable=False)
     expire_date = Column(Date, default=lambda: date.today() + timedelta(days=ACC_EXPIRING_DELTA*365))
     created_at = Column(Date, default=func.now())
@@ -61,6 +62,7 @@ class Transaction(Base):
 #schemas
 class BankAccountCreate(BaseModel):
     account_number: str
+    name:str
     user_id : int
     bank_name : BankName
     currency : Optional[Currency] = None

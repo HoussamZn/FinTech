@@ -1,5 +1,7 @@
 import React from "react";
-import { FaEdit, FaRegEnvelope, FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaEdit, FaRegEnvelope,FaPhone,FaAddressCard, FaLinkedin, FaGithub } from "react-icons/fa";
+import { LuLogOut } from "react-icons/lu";
+
 import profilbg from "../../images/bg-profil.png"; 
 import profil from "../../images/profil.png"; 
 import { useAuth } from "../../utils/AuthContext"; 
@@ -16,7 +18,7 @@ const ProfileCard = ({
   number = '+2126635259159',
 }) => {
 
-  const { user } = useAuth();
+  const { user,logout } = useAuth();
   return (
     <div className="w-sm mx-auto bg-neutral-100 dark:bg-neutral-800 shadow-lg rounded-lg overflow-hidden border">
       <div className="relative">
@@ -47,18 +49,26 @@ const ProfileCard = ({
             <span>{user.email}</span>
           </div>
           <div className="flex items-center space-x-2 text-gray-600">
-            <FaRegEnvelope className="text-indigo-600" />
-            <span>{number}</span>
+            <FaAddressCard className="text-indigo-600" />
+            <span>{user.CIN}</span>
           </div>
+          {user.number && <div className="flex items-center space-x-2 text-gray-600">
+            <FaPhone className="text-indigo-600" />
+            <span>{user.number}</span>
+          </div>}
 
         </div>
       </div>
 
       {/* Footer avec un bouton d'édition */}
       <div className="bg-neutral-200 dark:bg-neutral-900/50 p-4 flex justify-between items-center">
-        <a href="/dash/settings" className="text-indigo-600 flex items-center space-x-2 cursor-pointer">
+        <a href="/dash/settings" className="text-indigo-600 flex items-center duration-200 space-x-2 cursor-pointer hover:text-indigo-800 dark:hover:text-indigo-400 hover:-translate-y-0.5">
           <FaEdit />
           <span>Edit Profile</span>
+        </a>
+        <a onClick={logout} className="text-indigo-600 flex items-center duration-200 space-x-2 cursor-pointer hover:text-indigo-800 dark:hover:text-indigo-400 hover:-translate-y-0.5">
+          <LuLogOut />
+          <span>Logout</span>
         </a>
       </div>
     </div>
