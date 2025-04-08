@@ -5,7 +5,7 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 
-from models import User,UserCreate,UserUpdate,UserPassword
+from models import Favorite, User,UserCreate,UserUpdate,UserPassword,FavoriteCreate
 
 #auth
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -16,6 +16,11 @@ SECRET_KEY = "your_secret_key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
+def get_favorite_by_name_user(db: Session,user:int, name: str):
+    return db.query(Favorite).filter(Favorite.user_id == user,Favorite.name == name).first()
+
+def get_favorite_by_account_user(db: Session,user:int, account: str):
+    return db.query(Favorite).filter(Favorite.user_id == user,Favorite.account == account).first()
 
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
@@ -87,8 +92,6 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-
-
 def verify_token(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -98,5 +101,20 @@ def verify_token(token: str = Depends(oauth2_scheme)):
         return payload
     except JWTError:
         raise HTTPException(status_code=403, detail="Token is invalid or expired")
+    
+
+def create_favorite(db:Session,favorite:FavoriteCreate):
+    favorite_dict = favorite.model_dump()
+
+    db_favorite = Favorite(**favorite_dict)
+    db.add(db_favorite)
+    db.commit()
+    db.refresh(db_favorite)
+    return {"message": f"favorite : {db_favorite.name} created successfully!"}
+
+
+def get_favorites(id:int, db: Session):
+    favorites = db.query(Favorite).filter(Favorite.user_id == id).all()
+    return favorites
     
 

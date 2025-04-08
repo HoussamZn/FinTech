@@ -30,7 +30,7 @@ export default function Transactions() {
     return (
         <>
         <div className="flex flex-col bg-neutral-100 dark:bg-neutral-800 shadow-md rounded-lg divide-y gap-5 divide-neutral-300 dark:divide-neutral-700">
-            {/* General section*/}
+            {/* sender section*/}
             <div className="flex flex-col gap-5 sm:flex-col p-5 pb-8 sm:p-10">
                 {/* left section*/}
                 <div className="flex flex-col w-full sm:w-1/3">
