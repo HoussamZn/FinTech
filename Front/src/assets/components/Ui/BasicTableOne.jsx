@@ -16,7 +16,7 @@ const GET_TRANSACTIONS = GATEAWAY + "/transactions";
 
 
 export default function BasicTableOne() {
-  const [transactions, setTransactions] = useState(null);
+  const [transactions, setTransactions] = useState([]);
   const [transactionsLoading, setTransactionsLoading] = useState(true);
   const authContext = useAuth();
 
@@ -49,12 +49,11 @@ export default function BasicTableOne() {
       
       if (response.ok) {
         setTransactions(data);
-        console.log(data);
       } else {
           throw new Error(data.detail);
       }
     } catch (error) {
-      console.error("Creation failed:", error);
+      console.error("getting transaction failed:", error);
     }
   }
 
@@ -63,6 +62,13 @@ export default function BasicTableOne() {
       <SyncLoader color="#4f39f6" size={10} />
     </div> :
    (
+    transactions.length === 0 ?
+    <div className={`rounded-lg py-5 px-5 cursor-pointer duration-200 shadow-xs bg-gray-50 dark:bg-neutral-800 `}>
+        <p className={`text-sm font-medium text-pretty text-neutral-400 dark:text-neutral-500`}>
+        No Trasaction found !
+        </p>
+    </div>
+    :
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-neutral-50 dark:border-gray-700 dark:bg-neutral-900/20">
       <div className="max-w-full overflow-x-auto">
         <Table>
@@ -116,7 +122,7 @@ export default function BasicTableOne() {
 
           {/* Table Body */}
           <TableBody className="divide-y divide-neutral-200/50 dark:divide-white/[0.05]">
-            {transactions && transactions.map((transaction) => (
+            {transactions.map((transaction) => (
               <TableRow key={transaction.id}>
                 <TableCell className="px-5 py-4 sm:px-6 text-start font-medium text-gray-800 text-theme-sm dark:text-white/90">
                 {transaction.id}

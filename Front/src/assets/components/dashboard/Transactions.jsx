@@ -22,7 +22,7 @@ export default function Transactions() {
     const [selectedFav, setSelectedFav] = useState(null);
     
 
-    const [accounts, setAccounts] = useState(null);
+    const [accounts, setAccounts] = useState([]);
     const [accountsLoading, setAccountsLoading] = useState(true);
 
     const handleChange = (e) => {
@@ -103,12 +103,11 @@ export default function Transactions() {
           
           if (response.ok) {
               setAccounts(data);
-              console.log(data);
           } else {
               throw new Error(data.detail);
           }
         } catch (error) {
-          console.error("Creation failed:", error);
+          console.error("Getting accounts failed:", error);
         }
     }
     
@@ -128,7 +127,7 @@ export default function Transactions() {
                 </div>
                 {/* Right section*/}
                 <div className="flex flex-col gap-5">
-                    {(!accountsLoading && accounts ) ? accounts.map((fav)=>(
+                    {(!accountsLoading) ? accounts.map((fav)=>(
                         <div key={fav.id} onClick={() => handleSenderChange(fav.id)}  className={`flex rounded-lg py-2  px-5 cursor-pointer duration-200 shadow-xs  ${selectedSender === fav.id ? ' bg-blue-50 dark:bg-gray-700' : 'bg-gray-50 hover:bg-gray-100 dark:bg-neutral-900/60 dark:hover:bg-neutral-700'} `}>
                             <div className="flex-1">
                                 <h1 className={`text-base font-semibold tracking-tight text-balance ${selectedSender === fav.id ? 'text-blue-600 dark:text-blue-500' : 'text-neutral-900 dark:text-neutral-50'} `}>
@@ -148,6 +147,15 @@ export default function Transactions() {
                     :
                     <div className="flex justify-center items-center">
                         <SyncLoader color="#4f39f6" size={10} />
+                    </div>
+                    }
+                    {(accounts.length === 0 && !accountsLoading) && 
+                    <div  className={`flex rounded-lg py-2  px-5 cursor-pointer duration-200 shadow-xs bg-gray-50 hover:bg-gray-100 dark:bg-neutral-900/60 dark:hover:bg-neutral-700 `}>
+                        <div className="flex-1">
+                            <p className={` text-sm font-medium text-pretty text-neutral-400 dark:text-neutral-500 `}>
+                            You dont have any account to use !
+                            </p>
+                        </div>
                     </div>
                     }
                 </div>

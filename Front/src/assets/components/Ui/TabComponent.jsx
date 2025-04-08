@@ -16,7 +16,7 @@ const TabComponent = ({selectedFav, setSelectedFav}) => {
   
   const authContext = useAuth();
 
-  const [favorites, setFavorites] = useState(null);
+  const [favorites, setFavorites] = useState([]);
   const [favoritesLoading, setFavoritesLoading] = useState(true);
 
 
@@ -49,15 +49,13 @@ const TabComponent = ({selectedFav, setSelectedFav}) => {
       });
 
       const data = await response.json();
-      setFavorites(data);
-      console.log(data);
-      
       if (response.ok) {
+        setFavorites(data);
       } else {
           throw new Error(data.detail);
       }
     } catch (error) {
-      console.error("Creation failed:", error);
+      console.error("Getting favorites failed:", error);
     }
   }
 
@@ -289,7 +287,7 @@ const TabComponent = ({selectedFav, setSelectedFav}) => {
                 <SyncLoader color="#4f39f6" size={10} />
             </div>
         }
-        {(!favoritesLoading && (favorites && favorites.length === 0)) && 
+        {(!favoritesLoading && (favorites.length === 0)) && 
           <div className={`rounded-lg py-5 px-5 cursor-pointer duration-200 shadow-xs bg-gray-50 dark:bg-neutral-800 `}>
             <p className={`text-sm font-medium text-pretty text-neutral-400 dark:text-neutral-500`}>
             No favorite is found ! try to <a onClick={() => handleTabChange('Add new')} className='text-indigo-600 duration-200 hover:text-indigo-400 '>create a new one</a>
