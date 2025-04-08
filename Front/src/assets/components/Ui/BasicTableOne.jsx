@@ -14,34 +14,6 @@ import SyncLoader from "react-spinners/SyncLoader";
 const GATEAWAY = "http://127.0.0.1:8000/account";
 const GET_TRANSACTIONS = GATEAWAY + "/transactions";
 
-// Define the table data
-const tableData = [
-  {
-    id: 1,
-    sender: "Houssam",
-    receiver: "Bassam",
-    date : "01/01/2025",
-    Amount: "3.9K$",
-    status: "Pending",
-  },
-  {
-    id: 2,
-    sender: "Houssam",
-    receiver: "Bassam",
-    date : "01/01/2025",
-    Amount: "3.9K$",
-    status: "Done",
-  },
-  {
-    id: 3,
-    sender: "Houssam",
-    receiver: "Bassam",
-    date : "01/01/2025",
-    Amount: "3.9K$",
-    status: "Rejected",
-  },
-  
-];
 
 export default function BasicTableOne() {
   const [transactions, setTransactions] = useState(null);
@@ -74,10 +46,10 @@ export default function BasicTableOne() {
       });
 
       const data = await response.json();
-      setTransactions(data);
-      console.log(data);
       
       if (response.ok) {
+        setTransactions(data);
+        console.log(data);
       } else {
           throw new Error(data.detail);
       }

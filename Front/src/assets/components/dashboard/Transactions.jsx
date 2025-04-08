@@ -100,10 +100,10 @@ export default function Transactions() {
           });
     
           const data = await response.json();
-          setAccounts(data);
-          console.log(data);
           
           if (response.ok) {
+              setAccounts(data);
+              console.log(data);
           } else {
               throw new Error(data.detail);
           }
