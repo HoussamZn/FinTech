@@ -116,7 +116,7 @@ export default function BasicTableOne() {
 
           {/* Table Body */}
           <TableBody className="divide-y divide-neutral-200/50 dark:divide-white/[0.05]">
-            {transactions.map((transaction) => (
+            {transactions && transactions.map((transaction) => (
               <TableRow key={transaction.id}>
                 <TableCell className="px-5 py-4 sm:px-6 text-start font-medium text-gray-800 text-theme-sm dark:text-white/90">
                 {transaction.id}
