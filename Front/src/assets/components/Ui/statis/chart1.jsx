@@ -111,16 +111,15 @@ const Chart1 = () => {
   }, [currency, timeframe]);
 
   return (
-    <div className="w-full h-full bg-neutral-100 rounded-lg shadow-sm dark:bg-neutral-800 p-4 flex flex-col justify-evenly">
-      <div className="flex justify-between pb-2">
-        <div className="flex flex-row items-center">
-          <FaEthereum size={32} />
-          <h5 className="text-3xl font-bold text-gray-900 dark:text-white">Ethereum</h5>
-        </div>
-
-        <div className="flex flex-row items-center space-x-2">
+    <div className="w-full h-full bg-neutral-100 rounded-lg shadow-sm dark:bg-neutral-800 p-4 xl:flex flex-col justify-between xl:justify-center">
+      <div className="flex flex-col space-y-4 pb-2 xl :flex xl:flex-row xl:justify-between xl:space-y-0">
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-row items-center">
+            <FaEthereum size={32} />
+            <h5 className="text-3xl font-bold text-gray-900 dark:text-white">Ethereum</h5>
+          </div>
           <span
-            className={`bg-green-100 text-xs font-medium inline-flex items-center px-4 py-2 rounded-md 
+            className={`bg-green-100 text-xs font-medium inline-flex items-center px-3 py-2 rounded-md xl:ml-0.5
               ${last > thresholdValue ? "text-green-800 dark:text-green-300 bg-green-100" : "text-red-800 dark:text-red-300 bg-red-100"}`}
           >
             
@@ -159,33 +158,34 @@ const Chart1 = () => {
               )}
             {last.toFixed(2)}
           </span>
+        </div>
 
+        <div className="flex text-xs  xl:text-base flex-row items-center space-x-1 justify-between">
+          <div className="flex flex-col xl:flex-row justify-between items-start lg:items-center gap-2">
+            <select
+              className="border border--indigo-600 dark:border-indigo-600 text-indigo-600 dark:text-green-100 bg-white dark:bg-indigo-600 rounded-lg px-2 py-1  focus:outline-none focus:ring-2 focus:ring--indigo-600 transition duration-200"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+            >
+              {currencies.map((cur) => (
+                <option key={cur} value={cur} className="">
+                  Currency: {cur.toUpperCase()}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="">
             <div className="flex rounded-md overflow-hidden border border-indigo-600">
               {["day", "week", "month", "year"].map((period) => (
                 <button
                   key={period}
-                  className={`py-1 px-4 ${timeframe === period ? "bg-indigo-600 text-white" : "bg-white text-indigo-600"}`}
+                  className={`py-1 px-2 ${timeframe === period ? "bg-indigo-600 text-white" : "bg-white text-indigo-600"}`}
                   onClick={() => setTimeframe(period)}
                 >
                   {period.charAt(0).toUpperCase() + period.slice(1)}
                 </button>
               ))}
             </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-            <select
-              className="mt-1 sm:mt-0 border border--indigo-600 dark:border-indigo-600 text-indigo-600 dark:text-green-100 bg-white dark:bg-indigo-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring--indigo-600 transition duration-200"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-            >
-              {currencies.map((cur) => (
-                <option key={cur} value={cur}>
-                  Currency: {cur.toUpperCase()}
-                </option>
-              ))}
-            </select>
           </div>
         </div>
       </div>

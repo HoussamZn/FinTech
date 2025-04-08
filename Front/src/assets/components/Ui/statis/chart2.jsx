@@ -25,7 +25,7 @@ const Chart2 = () => {
               className="p-4 bg-white dark:bg-neutral-700 rounded-lg shadow text-sm"
             >
               <p className="font-medium text-gray-500 dark:text-gray-300 mb-1">{key}</p>
-              <p className="text-lg font-bold">
+              <p className="xl:text-base font-bold">
                 {typeof value === "number"
                   ? (key.toLowerCase().includes("supply") ? `${value.toLocaleString()} ETH` : `$${value.toLocaleString()}`)
                   : value}
