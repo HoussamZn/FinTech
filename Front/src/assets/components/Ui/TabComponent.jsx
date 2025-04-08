@@ -4,31 +4,15 @@ import Alert from "../Ui/Alert";
 import SyncLoader from "react-spinners/SyncLoader";
 
 
-const favorites = [
-    {
-        name:'Housam Zitan',
-        account : '51464186451848484',
-    },
-    {
-        name:'bassam zotia',
-        account : '514641864asas848484',
-    },
-    {
-        name:'Housam ziii',
-        account : '51465441864848484',
-    },
-]
-
 const GATEAWAY = "http://127.0.0.1:8000/user";
 const ADD_FAVORITE = GATEAWAY + "/favorite";
 const GET_FAVORITES = GATEAWAY + "/favorites";
 
 
 
-const TabComponent = () => {
+const TabComponent = ({selectedFav, setSelectedFav}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('Favorites');
-  const [selectedFav, setSelectedFav] = useState('');
   
   const authContext = useAuth();
 
@@ -277,22 +261,22 @@ const TabComponent = () => {
           .map((fav) => (
           <div 
             key={fav.id}
-            onClick={() => handleFavChange(fav.name)}  
+            onClick={() => handleFavChange(fav.account)}  
             className={`rounded-lg py-2 px-5 cursor-pointer duration-200 shadow-xs ${
-            selectedFav === fav.name 
+            selectedFav === fav.account 
                 ? 'bg-blue-50 dark:bg-gray-700' 
                 : 'bg-gray-50 hover:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700'
             }`}
           >
             <h1 className={`text-base font-semibold tracking-tight text-balance ${
-            selectedFav === fav.name 
+            selectedFav === fav.account 
                 ? 'text-blue-600 dark:text-blue-500' 
                 : 'text-neutral-900 dark:text-neutral-50'
             }`}>
             {fav.name}
             </h1>
             <p className={`text-sm font-medium text-pretty ${
-            selectedFav === fav.name 
+            selectedFav === fav.account 
                 ? 'text-blue-600/50 dark:text-blue-500/50' 
                 : 'text-neutral-400 dark:text-neutral-500'
             }`}>

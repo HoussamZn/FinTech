@@ -9,3 +9,5 @@ sqlalchemy
 passlib
 pydantic[email]
 websockets
+numpy
+requests

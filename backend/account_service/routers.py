@@ -1,8 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter,Body,HTTPException
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from models import BankAccount,BankAccountCreate,Transaction,TransactionCreate
+from models import BankAccount,BankAccountCreate,Transaction,TransactionCreate,TransactionType
 from database import get_db
+from services import get_accounts,get_accounts_by_number,get_transactions
+import httpx
+from fastapi.responses import JSONResponse
 
 
 router = APIRouter()
@@ -12,28 +15,62 @@ BACKENDS = {
     'gateaway': "http://localhost:8000"
 }
 
+async def forward_request(service_url: str, method: str, path: str, body=None, headers=None):
+    async with httpx.AsyncClient() as client:
+        url = f"{service_url}{path}"
+        response = await client.request(method, url, content=body, headers=headers)
+        return response
 
 @router.get("/")
 def home():
     return {"message": "Service ACOUNT responding"}
 
 @router.post("/acc")
-def create_acc(bank_account:BankAccountCreate,db: Session = Depends(get_db)):
-    bank_account_dict = bank_account.model_dump()
+async def create_acc(bank_account:BankAccountCreate,db: Session = Depends(get_db)):
+    response = await forward_request(BACKENDS["bank"], 'GET', f"/acc/{bank_account.account_number}")
+    if response.status_code != 200:
+        raise HTTPException(status_code=404, detail="No Bank account with this number")
 
+    db_acc = get_accounts_by_number(bank_account.account_number,db=db)
+    if db_acc:
+        raise HTTPException(status_code=400, detail="Acount with this number already exists")
+
+    bank_account_dict = bank_account.model_dump()
     db_acc = BankAccount(**bank_account_dict)
     db.add(db_acc)
     db.commit()
     db.refresh(db_acc)
-    return db_acc
     return {"message": f"account : {db_acc.account_number} created successfully!"}
 
+@router.post("/accs")
+async def get_accs(user_id: int = Body(..., embed=True),db: Session = Depends(get_db)):
+    accs = get_accounts(user_id,db)
+
+    for acc in accs:
+        response = await forward_request(BACKENDS["bank"], 'GET', f"/acc/{acc['account_number']}")
+        acc['balance'] = response.json()['balance']
+
+    return accs
+
+@router.post("/transactions")
+def get_trans(user_id: int = Body(..., embed=True),db: Session = Depends(get_db)):
+    return get_transactions(user_id,db)
+
+
 @router.post("/transaction")
-def create_acc(transaction:TransactionCreate,db: Session = Depends(get_db)):
+def create_trans(transaction:TransactionCreate,db: Session = Depends(get_db)):
     transaction_dict = transaction.model_dump()
+    receiver_number = transaction.receiver_account_number
+    db_acc = get_accounts_by_number(receiver_number,db=db)
+    if db_acc:
+        transaction_dict["receier_account_id"] = db_acc.id
+        transaction_dict['transaction_type'] = TransactionType.ACC_TO_ACC
+        del transaction_dict["receiver_account_number"]
+    else :
+        transaction_dict['transaction_type'] = TransactionType.ACC_TO_BANK
 
     db_acc = Transaction(**transaction_dict)
     db.add(db_acc)
     db.commit()
-    return {"message": f"transaction : {db_acc} created successfully!"}
+    return {"message": "Transaction created successfully!"}
 

@@ -26,11 +26,11 @@ class BankAccount(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     account_number = Column(String, unique=True,nullable=False)
-    balance = Column(String,unique=True,default=0.0)
+    balance = Column(String,default=0.0)
     expire_date = Column(Date, default=lambda: date.today() + timedelta(days=ACC_EXPIRING_DELTA*365))
     created_at = Column(Date, default=func.now())
     currency = Column(Enum(Currency),default=Currency.USD)
-    card_type = Column(Enum(CardType),nullable=True)
+    card_type = Column(Enum(CardType),default=CardType.MASTERCARD)
     cvv = Column(String,default=lambda:f"{random.randint(100,999)}")
 
 #schemas

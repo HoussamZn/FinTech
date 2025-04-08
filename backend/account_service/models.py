@@ -69,10 +69,16 @@ class BankAccountCreate(BaseModel):
 
 class TransactionCreate(BaseModel):
     amount: float
-    transaction_type : TransactionType
     sender_account_id : int
-    receier_account_id : Optional[int] = None
-    receiver_account_number : Optional[str] = None
+    receiver_account_number : str
+
+def model_to_dict(obj):
+    return {
+        column.name: getattr(obj, column.name)
+        for column in obj.__table__.columns
+}
+
+
 
 
 
