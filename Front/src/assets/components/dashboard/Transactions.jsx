@@ -128,7 +128,7 @@ export default function Transactions() {
                 </div>
                 {/* Right section*/}
                 <div className="flex flex-col gap-5">
-                    {!accountsLoading ? accounts.map((fav)=>(
+                    {(!accountsLoading && accounts ) ? accounts.map((fav)=>(
                         <div key={fav.id} onClick={() => handleSenderChange(fav.id)}  className={`flex rounded-lg py-2  px-5 cursor-pointer duration-200 shadow-xs  ${selectedSender === fav.id ? ' bg-blue-50 dark:bg-gray-700' : 'bg-gray-50 hover:bg-gray-100 dark:bg-neutral-900/60 dark:hover:bg-neutral-700'} `}>
                             <div className="flex-1">
                                 <h1 className={`text-base font-semibold tracking-tight text-balance ${selectedSender === fav.id ? 'text-blue-600 dark:text-blue-500' : 'text-neutral-900 dark:text-neutral-50'} `}>
