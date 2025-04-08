@@ -31,6 +31,14 @@ export default function Transactions() {
 
     const transactionSubmit = async (e) => {
         e.preventDefault();
+        if (!selectedSender){
+            setTransactionError({type:"warning",message:'Please select an account to use'});
+            return
+        }
+        if(!selectedFav){
+            setTransactionError({type:"warning",message:'Please select a receiver'});
+            return
+        }
         setTransactionError(null);
         setSubmitLoading(true);
         await transactionCreate(credentials);
@@ -200,7 +208,7 @@ export default function Transactions() {
                             required
                             placeholder="0"
                             className="block w-full rounded-md bg-neutral-200 dark:bg-neutral-900/80 px-3 py-1.5 text-base text-neutral-900 dark:text-neutral-50 placeholder:text-neutral-900/30 dark:placeholder:text-neutral-50/30 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                            min="0"
+                            min="10"
                             step="100"
                             onChange={handleChange}
                             onWheel={(e) => e.target.blur()}
