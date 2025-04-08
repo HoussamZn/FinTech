@@ -1,7 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { useEffect, useState } from "react";
-import SyncLoader from "react-spinners/SyncLoader";
 
 const ProtectedRoute = () => {
     const { user, fetchUserProfile } = useAuth();

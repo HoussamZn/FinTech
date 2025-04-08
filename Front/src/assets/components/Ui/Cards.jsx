@@ -31,7 +31,7 @@ const Cards = () => {
                 <FaArrowCircleRight className="w-6 h-6 text-gray-800 dark:text-white" />
             </button>
         </div>
-        <div className={`space-y-4 bg-gradient-to-r ${cardData[currentCard].gradient} rounded-lg p-4`}>
+        <div className={`space-y-4 aspect-[4/2] bg-gradient-to-r ${cardData[currentCard].gradient} rounded-lg p-4 lg:mx-10`}>
             <p className="text-gray-500 dark:text-gray-400 text-sm">Balance</p>
             <div className="text-2xl font-bold text-gray-900 dark:text-white">{cardData[currentCard].balance}</div>
             <div className="flex items-center space-x-2 text-lg font-mono text-gray-800 dark:text-white">

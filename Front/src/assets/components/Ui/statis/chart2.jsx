@@ -1,73 +1,41 @@
-import React, { useEffect, useRef, useState } from "react";
-import ApexCharts from "apexcharts";
-
+import React ,{ useEffect, useState } from "react";
+import axios from "axios";
 const Chart2 = () => {
-  const chartRef = useRef(null);
-  const [chartSize, setChartSize] = useState(getChartSize());
-
-  function getChartSize() {
-    return window.innerWidth < 768 ? 250 : 320;
-  }
-
+  const [ethStats, setEthStats] = useState(null);
   useEffect(() => {
-    function handleResize() {
-      setChartSize(getChartSize());
-    }
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    axios.get("http://localhost:8004/eth-stats") 
+      .then((response) => {
+        setEthStats(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors du chargement des statistiques Ethereum :", error);
+      });
   }, []);
-
-  function getChartOptions() {
-    return {
-      series: [44, 55, 41, 17],
-      colors: ["#FF9F43", "#1C84FF", "#F39C12", "#F4B400"],
-      chart: {
-        type: "donut",
-        height: chartSize,
-        width: "100%",
-      },
-      stroke: {
-        show: false,
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            size: "75%",
-            labels: {
-              show: true,
-              total: {
-                show: true,
-                label: "Total",
-              },
-            },
-          },
-        },
-      },
-      labels: ["Direct", "Referral", "Social", "Organic"],
-      legend: {
-        position: "bottom",
-      },
-    };
-  }
-
-  useEffect(() => {
-    if (chartRef.current) {
-      const chart = new ApexCharts(chartRef.current, getChartOptions());
-      chart.render();
-
-      return () => {
-        chart.destroy();
-      };
-    }
-  }, [chartSize]);
-
   return (
     <div className="w-full h-full bg-neutral-100 rounded-lg shadow-sm dark:bg-neutral-800 p-4 md:p-6 flex flex-col justify-evenly">
-      <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
-        Website traffic
-      </h5>
-      <div ref={chartRef}></div>
+      <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
+        Ethereum Statistics
+      </h2>
+
+      {ethStats ? (
+        <div className="flex flex-col sm:grid-cols-2 md:grid-cols-3 gap-4 text-gray-800 dark:text-gray-100">
+          {Object.entries(ethStats).map(([key, value]) => (
+            <div
+              key={key}
+              className="p-4 bg-white dark:bg-neutral-700 rounded-lg shadow text-sm"
+            >
+              <p className="font-medium text-gray-500 dark:text-gray-300 mb-1">{key}</p>
+              <p className="text-lg font-bold">
+                {typeof value === "number"
+                  ? (key.toLowerCase().includes("supply") ? `${value.toLocaleString()} ETH` : `$${value.toLocaleString()}`)
+                  : value}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500 dark:text-gray-400">Loading statistics...</p>
+      )}
     </div>
   );
 };
