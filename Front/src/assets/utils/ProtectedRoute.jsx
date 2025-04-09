@@ -18,7 +18,7 @@ const ProtectedRoute = () => {
             setIsLoading(false);
         };
         checkAuth();
-    }, [token]);
+    }, []);
 
     if (isLoading) {
         return (

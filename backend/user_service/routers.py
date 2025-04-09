@@ -107,4 +107,7 @@ async def verify_user_token(authorization: str = Header(None),db: Session = Depe
     username = verify_token(token=token)
     username = username.get("sub")
     user = get_user_by_username(db,username=username)
+    if user is None :
+        raise HTTPException(status_code=404, detail="Inval Token")
+
     return {"message": "Token is valid, Username:",'user': user}

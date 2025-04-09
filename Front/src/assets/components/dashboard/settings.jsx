@@ -78,6 +78,7 @@ export default function Settings() {
             const data = await response.json();
             if (response.ok) {
                 setPersonalError({type:"success",message:data.message});
+                authContext.logout();
             } else {
                 setPersonalError({type:"error",message:data.detail});
                 throw new Error(data.detail);
