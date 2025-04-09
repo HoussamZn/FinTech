@@ -39,7 +39,8 @@ const Transaction = () => {
         const data = await response.json();
         
         if (response.ok) {
-          setTransactions(data);
+          const data_ = data.slice(0, 3);
+          setTransactions(data_);
         } else {
             throw new Error(data.detail);
         }
