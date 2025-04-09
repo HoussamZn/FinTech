@@ -1,17 +1,40 @@
 'use client'
-import { Children, useState } from "react";
+import { Children, useState,useEffect } from "react";
 import Navbar from "../navbar"
 import SideBar from "../sidebar";
 import Footer from "../footer";
 import { Outlet } from "react-router-dom";
+import { useAuth } from "../../utils/AuthContext";
+import Toast from "../Ui/Toast";
 
 
 export default function Dashboard({}) {
+
+
+  const [message, setMessage] = useState(null);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const socket = new WebSocket(`ws://127.0.0.1:8002/ws/${user.id}`);
+    socket.onmessage = (event) => {
+      setMessage(event.data);
+    };
+  }, [user]);
+
+  const handleClose = () => {
+    setMessage(null);
+  };
+
+
   const [isOpen, setIsOpen] = useState(false);
   const [isNotHero, setIsNotHero] = useState(true);
   const [side, setSide] = useState(false);
 
   return (
+    <>
+    {message &&
+      <Toast message={message} onClose={handleClose} /> 
+    }
     <div className="flex flex-col min-h-screen bg-neutral-200 dark:bg-neutral-950">
       <div className="flex flex-1">
         <div className="lg:w-64 flex-shrink-0">
@@ -57,5 +80,6 @@ export default function Dashboard({}) {
       {/* footer */}
       <Footer/>
     </div>
+    </>
   )
 }

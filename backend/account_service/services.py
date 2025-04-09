@@ -1,4 +1,4 @@
-from models import BankAccount,Transaction,model_to_dict
+from models import BankAccount,Transaction,model_to_dict,Notification,NotificationCreate
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 
@@ -22,3 +22,10 @@ def get_transactions(id: int, db: Session):
     ).all()
 
     return transactions
+
+def create_notification(db: Session, notif: NotificationCreate):
+    db_notif = Notification(**notif.model_dump())
+    db.add(db_notif)
+    db.commit()
+    db.refresh(db_notif)
+    return db_notif

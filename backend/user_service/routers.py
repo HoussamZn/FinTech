@@ -8,8 +8,6 @@ from database import get_db
 from services import UserCreate,UserUpdate,UserPassword,FavoriteCreate,get_user_by_id,get_user_by_username,get_user_by_email,get_user_by_CIN,create_user,authenticate_user,ACCESS_TOKEN_EXPIRE_MINUTES,create_access_token,verify_token,update_user,update_password,delete_user,create_favorite,get_favorite_by_name_user,get_favorite_by_account_user,get_favorites
 router = APIRouter()
 
-
-
 @router.post("/favorite")
 def create_fav(favorite: FavoriteCreate, db: Session = Depends(get_db)):
     selected_user = get_user_by_id(db,favorite.user_id)

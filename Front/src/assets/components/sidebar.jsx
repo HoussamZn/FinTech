@@ -63,7 +63,7 @@ export default function SideBar({side,setSide}) {
   return(
     <>
     {/* Large screen sidebar */}
-    <div className={`hidden z-50 flex-col sticky top-0 left-0 min-h-screen w-64 bg-neutral-100 dark:bg-neutral-900 bg-opacity-100 text-neutral-900 dark:text-neutral-50 p-5  justify-between transform transition-transform duration-300 lg:flex shadow-md`}>
+    <div className={`hidden z-30 flex-col sticky top-0 left-0 min-h-screen w-64 bg-neutral-100 dark:bg-neutral-900 bg-opacity-100 text-neutral-900 dark:text-neutral-50 p-5  justify-between transform transition-transform duration-300 lg:flex shadow-md`}>
       {/* logo */}
       <div className="flex mb-10 justify-center">
         <a href="/">

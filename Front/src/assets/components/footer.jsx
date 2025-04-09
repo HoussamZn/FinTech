@@ -1,6 +1,6 @@
 export default function Footer() {
     return (
-        <footer id="Contact" className=" shadow-lg  w-full h-10  z-50 mt-auto">
+        <footer id="Contact" className=" shadow-lg  w-full h-10  z-40 mt-auto">
             <div className=" flex items-center relative isolate overflow-hidden h-full bg-white dark:bg-neutral-900 py-16 sm:py-24 lg:py-32">
                 <div className="max-w-screen-xl px-4 py-12 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8">
                     <div className="flex justify-center  space-x-6">

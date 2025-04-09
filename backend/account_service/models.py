@@ -1,8 +1,8 @@
-from sqlalchemy import Column, Integer, String,Date,Enum,Float,ForeignKey
+from sqlalchemy import Column, Integer, String,Date,Enum,Float,ForeignKey,Boolean, DateTime
 from pydantic import BaseModel
 from typing import Optional
 from sqlalchemy.sql import func
-from datetime import date,timedelta
+from datetime import date,timedelta,datetime
 import enum
 from sqlalchemy.orm import relationship
 
@@ -59,6 +59,17 @@ class Transaction(Base):
     receiver_account = relationship("BankAccount", foreign_keys=[receier_account_id], back_populates="received_transactions")
 
 
+class Notification(Base):
+    __tablename__ = "notifications"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    message = Column(String, nullable=False)
+    user_id = Column(Integer, nullable=False)
+    is_read = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+
 #schemas
 class BankAccountCreate(BaseModel):
     account_number: str
@@ -72,11 +83,28 @@ class TransactionCreate(BaseModel):
     sender_account_id : int
     receiver_account_number : str
 
+class NotificationCreate(BaseModel):
+    title: str
+    message: str
+    user_id: int
+
+class NotificationOut(BaseModel):
+    id: int
+    title: str
+    message: str
+    user_id: int
+    is_read: bool
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
 def model_to_dict(obj):
     return {
         column.name: getattr(obj, column.name)
         for column in obj.__table__.columns
-}
+    }
 
 
 

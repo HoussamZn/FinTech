@@ -1,11 +1,16 @@
 from fastapi import APIRouter,Body,HTTPException
-from fastapi import Depends
+from fastapi import Depends,WebSocket
 from sqlalchemy.orm import Session
-from models import BankAccount,BankAccountCreate,Transaction,TransactionCreate,TransactionType
+from models import BankAccount,BankAccountCreate, NotificationCreate,Transaction,TransactionCreate,TransactionType
 from database import get_db
-from services import get_accounts,get_accounts_by_number,get_transactions
+from services import create_notification, get_accounts,get_accounts_by_number,get_transactions
 import httpx
 from fastapi.responses import JSONResponse
+from kafka_producer import send_notification
+import json
+from websocket_manager import manager
+
+
 
 
 router = APIRouter()
@@ -73,4 +78,23 @@ def create_trans(transaction:TransactionCreate,db: Session = Depends(get_db)):
     db.add(db_acc)
     db.commit()
     return {"message": "Transaction created successfully!"}
+
+
+@router.post("/notify")
+def notify(notif: NotificationCreate, db: Session = Depends(get_db)):
+    db_notif = create_notification(db, notif)
+    send_notification("notifications", json.dumps(notif.model_dump()))
+    return {"status": "sent"}
+
+
+@router.websocket("/ws/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, user_id: int):
+    await manager.connect(websocket, user_id)
+    try:
+        while True:
+            await websocket.receive_text()  # To keep connection alive
+    except:
+        manager.disconnect(user_id)
+
+
 

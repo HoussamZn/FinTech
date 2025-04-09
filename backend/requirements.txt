@@ -11,3 +11,6 @@ pydantic[email]
 websockets
 numpy
 requests
+pydantic
+confluent-kafka
+psycopg2-binary

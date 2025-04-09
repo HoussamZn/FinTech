@@ -5,7 +5,7 @@ import Account from "./assets/components/dashboard/Account";
 import Transactions from "./assets/components/dashboard/Transactions";
 import './App.css'
 import { useEffect } from "react";
-
+import NotificationSocket from "./assets/components/notif";
 
 
 import Dashboard from "./assets/components/dashboard/Dashboard";
@@ -38,6 +38,7 @@ function App() {
             <Route path="transactions" element={<Transactions/>} />
             <Route path="settings" element={<Settings/>} />
             <Route path="Account" element={<Account/>} />
+            <Route path="notification" element={<NotificationSocket/>} />
           </Route>
         </Route>
       </Routes>
