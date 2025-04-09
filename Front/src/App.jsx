@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Hero from "./assets/components/Hero/Hero";
 import Settings from "./assets/components/dashboard/settings";
+import Account from "./assets/components/dashboard/Account";
 import Transactions from "./assets/components/dashboard/Transactions";
 import './App.css'
 import { useEffect } from "react";
@@ -36,6 +37,7 @@ function App() {
             <Route path="statis" element={<Statistics/>} />
             <Route path="transactions" element={<Transactions/>} />
             <Route path="settings" element={<Settings/>} />
+            <Route path="Account" element={<Account/>} />
           </Route>
         </Route>
       </Routes>

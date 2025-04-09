@@ -1,59 +1,93 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IoPersonSharp } from "react-icons/io5";
-import { IoIosArrowDropdown } from "react-icons/io";
+import SyncLoader from "react-spinners/SyncLoader";
+import { useAuth } from "../../utils/AuthContext";
+
+const GATEAWAY = "http://127.0.0.1:8000/account";
+const GET_TRANSACTIONS = GATEAWAY + "/transactions";
 
 const Transaction = () => {
-  const [transactions] = useState([
-    {
-      id: 1,
-      title: 'Hanaa Belaid',
-      amount: 150.99,
-      due_date: 'April 15, 2025',
-    },
-    {
-      id: 2,
-      title: 'Meriem Belaid',
-      amount: 90.99,
-      due_date: 'April 20, 2025',
-    },
-    {
-      id: 3,
-      title: 'Yassine Belaid',
-      amount: 120.99,
-      due_date: 'April 25, 2025',
-    },
-  ]);
+  const [transactions, setTransactions] = useState([]);
+  const [transactionsLoading, setTransactionsLoading] = useState(true);
+  const authContext = useAuth();
+
+  useEffect(() => {
+      const fetchTransactions = async () => {
+      setTransactionsLoading(true);
+      await getTransactions();
+      setTransactionsLoading(false);
+      };
+  
+      fetchTransactions();
+    }, []);
+  
+    const getTransactions = async() => {
+      const data ={user_id:authContext.user.id}
+      const jsonToSend = JSON.stringify(data); 
+      console.log(jsonToSend);
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(GET_TRANSACTIONS, {
+          method: 'POST',
+          headers: { 
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}` 
+          },
+          body: jsonToSend,
+        });
+  
+        const data = await response.json();
+        
+        if (response.ok) {
+          setTransactions(data);
+        } else {
+            throw new Error(data.detail);
+        }
+      } catch (error) {
+        console.error("getting transaction failed:", error);
+      }
+    };
 
   return (
-    <div className="w-full h-full bg-neutral-100 dark:bg-neutral-800 rounded-lg shadow-lg p-6 flex flex-col">
-      {/* En-tête */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Transactions</h3>
-        <button 
-          className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
-          disabled
-        >
-          <IoIosArrowDropdown className="w-6 h-6 text-gray-800 dark:text-white" />
-        </button>
+    <div className="w-full h-full bg-neutral-100 dark:bg-neutral-800 rounded-2xl shadow-xl p-6 flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-xl font-bold text-gray-800 dark:text-white">Transactions</h3>
+        
       </div>
 
-      <div className="space-y-4">
-        {transactions.map((transaction) => (
-          <div 
-            key={transaction.id} 
-            className="flex justify-between items-center p-4 bg-gray-900/50 backdrop-blur-md rounded-xl text-white opacity-80"
-          >
-            <div className="flex items-center space-x-4">
-              <IoPersonSharp className="w-6 h-6" />
-              <p className="text-sm">
-                {transaction.title} <span className="text-xs text-gray-300">due {transaction.due_date}</span>
-              </p>
-            </div>
-            <div className="text-lg font-bold text-red-600">${transaction.amount}</div>
+    
+      {transactionsLoading ? (
+        <p className="text-center text-gray-500 dark:text-gray-300 italic">
+          <div className="flex justify-center items-center">
+            <SyncLoader color="#4f39f6" size={10} />
           </div>
-        ))}
-      </div>
+        </p>
+      ) : transactions.length === 0 ? (
+        <p className="text-center text-gray-500 dark:text-gray-300 italic">No transactions found.</p>
+      ) : (
+        <div className="space-y-4 overflow-y-auto">
+          {transactions.map((transaction) => (
+            <div
+              key={transaction.id}
+              className="flex justify-between items-center p-4 bg-indigo-100/60 backdrop-blur-md rounded-xl text-white"
+            >
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2 text-sm">
+                  <IoPersonSharp className="w-5 h-5 text-gray-400 dark:text-amber-50" />
+                  <span className="font-medium text-gray-400 dark:text-amber-50">{transaction.sender_account_id} → {transaction.receier_account_id}</span>
+                </div>
+                <div className="text-xs text-gray-400 dark:text-amber-50">
+                  {transaction.transaction_date} • {transaction.transaction_type}
+                </div>
+              </div>
+              <div className="text-lg font-bold text-red-400">${transaction.amount}</div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
+
   );
 };
 

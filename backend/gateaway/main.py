@@ -33,7 +33,7 @@ BACKENDS = {
 
 
 async def forward_request(service_url: str, method: str, path: str, body=None, headers=None):
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=60.0) as client:
         url = f"{service_url}{path}"
         response = await client.request(method, url, content=body, headers=headers)
         return response

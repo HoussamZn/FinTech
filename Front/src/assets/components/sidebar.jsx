@@ -14,7 +14,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { TbTransactionBitcoin } from "react-icons/tb";
 import { GoBell } from "react-icons/go";
 import { TbPresentationAnalytics } from "react-icons/tb";
-
+import { MdOutlineAccountCircle } from "react-icons/md";
 import logo from "../images/logo.png";
 
 
@@ -22,6 +22,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dash' },
   { name: 'Statistics', href: '/dash/statis' },
   { name: 'Transactions', href: '/dash/transactions' },
+  { name: 'Account', href: '/dash/Account' },
   { name: 'Setting', href: '/dash/settings' },
 ]
 
@@ -29,6 +30,7 @@ const SIDEBAR_LINKS = [
   { id: 1, path: "/dash", name: "Dashboard", icon: LuBox }, 
   { id: 2, path: "/dash/statis", name: "Statistics", icon: TbPresentationAnalytics }, 
   { id: 3, path: "/dash/transactions", name: "Transaction", icon: TbTransactionBitcoin }, 
+  { id: 4, path: "/dash/Account", name: "Account", icon: MdOutlineAccountCircle  }, 
   { id: 5, path: "/dash/settings", name: "Settings", icon: IoSettingsOutline }, 
 ];
 
