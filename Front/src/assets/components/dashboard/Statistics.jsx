@@ -19,8 +19,27 @@ const Statistics = () => {
   const [txHash, setTxHash] = useState('');
   const [credentials, setCredentials] = useState({receiver:"",amount:""});
 
+
   useEffect(() => {
-      setAccount(authContext.user.wallet);
+    const checkAccounts = async () => {
+      try {
+        console.log("sdddddddddd");
+        
+        
+        if (window.ethereum) {
+          const web3 = new Web3(window.ethereum);
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          
+          if (accounts[0] === authContext.user.wallet) {
+            setAccount(authContext.user.wallet);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking accounts:", error);
+      }
+    };
+  
+    checkAccounts();
   }, [authContext.user]);
 
 
@@ -144,6 +163,7 @@ const Statistics = () => {
                       id="amount"
                       name="amount"
                       type="number"
+                      step='any'
                       required
                       placeholder="Amount"
                       onChange={handleChange}
