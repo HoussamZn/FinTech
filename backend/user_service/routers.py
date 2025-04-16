@@ -78,6 +78,16 @@ def delete(id: int = Body(..., embed=True),db: Session = Depends(get_db)):
     return delete_user(db,selected_user)
 
 
+@router.put("/addwallet")
+def addwallet(wallet: str = Body(..., embed=True),id: int = Body(..., embed=True),db: Session = Depends(get_db)):
+    selected_user = get_user_by_id(db,id)
+    if selected_user is None:
+        raise HTTPException(status_code=404, detail="No user with this ID")
+    selected_user.wallet = wallet
+    db.commit()
+    db.refresh(selected_user)
+    return {"message": "wallet added successfully"}
+
 @router.get("/")
 def home():
     return {"message": "Service USER responding"}
@@ -109,3 +119,4 @@ async def verify_user_token(authorization: str = Header(None),db: Session = Depe
         raise HTTPException(status_code=404, detail="Inval Token")
 
     return {"message": "Token is valid, Username:",'user': user}
+

@@ -21,6 +21,7 @@ class User(Base):
     CIN = Column(String,unique=True,nullable=True)
     type = Column(Enum(UserType),default=UserType.CLIENT)
     number = Column(String,unique=True,nullable=True)
+    wallet = Column(String,nullable=True)
 
     favorites = relationship("Favorite", back_populates="user", cascade="all, delete-orphan")
 
@@ -45,6 +46,7 @@ class UserCreate(BaseModel):
     CIN: Optional[str] = None
     type : Optional[UserType] = None
     number: Optional[str] = None
+
 
 
 class FavoriteCreate(BaseModel):
