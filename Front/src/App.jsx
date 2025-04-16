@@ -40,8 +40,6 @@ function App() {
             <Route path="settings" element={<Settings/>} />
             <Route path="Account" element={<Account/>} />
             <Route path="notification" element={<NotificationSocket/>} />
-            <Route path="test" element={<Test/>} />
-
           </Route>
         </Route>
       </Routes>
