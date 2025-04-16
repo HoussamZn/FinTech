@@ -1,9 +1,9 @@
 from fastapi import APIRouter,HTTPException
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from models import BankAccount,BankAccountCreate
+from models import BankAccount,BankAccountCreate,Transact
 from database import get_db
-from services import get_bank_by_account_number,create_bank
+from services import get_bank_by_account_number,create_bank,check_balance,add_amount
 
 router = APIRouter()
 BACKENDS = {
@@ -26,6 +26,24 @@ def get_acc(number:str,db: Session = Depends(get_db)):
 @router.post("/acc")
 def create_acc(acc:BankAccountCreate,db: Session = Depends(get_db)):
     return create_bank(db=db,acc=acc)
+
+
+@router.put("/transaction")
+def make_transaction(transaction:Transact,db: Session = Depends(get_db)):
+    sender = get_bank_by_account_number(db=db,account_number=transaction.sender)
+    receiver = get_bank_by_account_number(db=db,account_number=transaction.receiver)
+    if sender is None or receiver is None:
+        raise HTTPException(status_code=404, detail="No account with this number")
+    if not check_balance(transaction.amount,sender):
+        raise HTTPException(status_code=402, detail="No suffisant balance")
+    sender.balance = sender.balance - transaction.amount
+    receiver.balance = receiver.balance + transaction.amount
+    db.add_all([sender, receiver])
+    db.commit()
+    return {"message": "Transaction is completed"}
+
+
+
 
 
 

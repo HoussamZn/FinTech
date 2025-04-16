@@ -18,6 +18,8 @@ export default function Dashboard({}) {
     const socket = new WebSocket(`ws://127.0.0.1:8002/ws/${user.id}`);
     socket.onmessage = (event) => {
       setMessage(event.data);
+      const audio = new Audio("/audio/notif.wav");
+      audio.play();
     };
   }, [user]);
 

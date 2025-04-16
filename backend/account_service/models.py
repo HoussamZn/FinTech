@@ -100,6 +100,12 @@ class NotificationOut(BaseModel):
         orm_mode = True
 
 
+class Transact(BaseModel):
+    sender: str
+    receiver : str
+    amount : float
+
+
 def model_to_dict(obj):
     return {
         column.name: getattr(obj, column.name)

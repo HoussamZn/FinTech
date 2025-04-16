@@ -59,11 +59,11 @@ const Transaction = () => {
 
     
       {transactionsLoading ? (
-        <p className="text-center text-gray-500 dark:text-gray-300 italic">
+        <div className="text-center text-gray-500 dark:text-gray-300 italic">
           <div className="flex justify-center items-center">
             <SyncLoader color="#4f39f6" size={10} />
           </div>
-        </p>
+        </div>
       ) : transactions.length === 0 ? (
         <p className="text-center text-gray-500 dark:text-gray-300 italic">No transactions found.</p>
       ) : (

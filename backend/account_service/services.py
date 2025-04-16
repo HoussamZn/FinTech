@@ -10,6 +10,10 @@ def get_accounts_by_number(number:str, db: Session):
     account = db.query(BankAccount).filter(BankAccount.account_number == number).first()
     return account
 
+def get_accounts_by_id(id:str, db: Session):
+    account = db.query(BankAccount).filter(BankAccount.id == id).first()
+    return account
+
 def get_transactions(id: int, db: Session):
     user_accounts = db.query(BankAccount).filter(BankAccount.user_id == id).all()
     account_ids = [account.id for account in user_accounts]
@@ -29,3 +33,6 @@ def create_notification(db: Session, notif: NotificationCreate):
     db.commit()
     db.refresh(db_notif)
     return db_notif
+
+
+
