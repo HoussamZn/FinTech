@@ -6,7 +6,6 @@ import Transactions from "./assets/components/dashboard/Transactions";
 import './App.css'
 import { useEffect } from "react";
 import NotificationSocket from "./assets/components/notif";
-import Test from "./assets/components/dashboard/test";
 
 
 import Dashboard from "./assets/components/dashboard/Dashboard";
