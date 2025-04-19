@@ -9,15 +9,12 @@ from fastapi.responses import JSONResponse
 from kafka_producer import send_notification
 import json
 from websocket_manager import manager
-
-
+import os
 
 
 router = APIRouter()
 BACKENDS = {
-    "user": "http://localhost:8001",
-    "bank":"http://localhost:8003",
-    'gateaway': "http://localhost:8000"
+    "bank": os.environ.get("BANK_SERVICE","http://localhost:8003")
 }
 
 async def forward_request(service_url: str, method: str, path: str, body=None, headers=None):

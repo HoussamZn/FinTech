@@ -7,6 +7,8 @@ import { Outlet } from "react-router-dom";
 import { useAuth } from "../../utils/AuthContext";
 import Toast from "../Ui/Toast";
 
+const WS = import.meta.env.VITE_API_WS;
+const host = window.location.host;
 
 export default function Dashboard({}) {
 
@@ -15,7 +17,7 @@ export default function Dashboard({}) {
   const { user } = useAuth();
 
   useEffect(() => {
-    const socket = new WebSocket(`ws://127.0.0.1:8002/ws/${user.id}`);
+    const socket = new WebSocket(`ws://${host}${WS}/${user.id}`);
     socket.onmessage = (event) => {
       setMessage(event.data);
       const audio = new Audio("/audio/notif.wav");

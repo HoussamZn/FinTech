@@ -5,9 +5,9 @@ import TabComponent from "../Ui/TabComponent";
 import SyncLoader from "react-spinners/SyncLoader";
 import Alert from "../Ui/Alert";
 
-const GATEAWAY = "http://127.0.0.1:8000/account";
-const GET_ACCOUNTS = GATEAWAY + "/accs";
-const CREATE_TRANS = GATEAWAY + "/transaction";
+const GATEAWAY = import.meta.env.VITE_API_GATEAWAY;
+const GET_ACCOUNTS = GATEAWAY + "/account/accs";
+const CREATE_TRANS = GATEAWAY + "/account/transaction";
 
 
 export default function Transactions() {

@@ -3,8 +3,8 @@ import { IoPersonSharp } from "react-icons/io5";
 import SyncLoader from "react-spinners/SyncLoader";
 import { useAuth } from "../../utils/AuthContext";
 
-const GATEAWAY = "http://127.0.0.1:8000/account";
-const GET_TRANSACTIONS = GATEAWAY + "/transactions";
+const GATEAWAY = import.meta.env.VITE_API_GATEAWAY;
+const GET_TRANSACTIONS = GATEAWAY + "/account/transactions";
 
 const Transaction = () => {
   const [transactions, setTransactions] = useState([]);

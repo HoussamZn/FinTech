@@ -4,7 +4,7 @@ import httpx
 from pydantic import BaseModel,EmailStr
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
-
+import os
 
 app = FastAPI()
 
@@ -26,9 +26,10 @@ app.add_middleware(
 
 # Backend service mappings
 BACKENDS = {
-    "user": "http://localhost:8001",
-    'account': "http://localhost:8002",
-    "bank" : "http://localhost:8003"
+    "user": os.environ.get("USER_SERVICE","http://localhost:8001"),
+    'account': os.environ.get("ACCOUNT_SERVICE","http://localhost:8002"),
+    "bank": os.environ.get("BANK_SERVICE","http://localhost:8003")
+
 }
 
 

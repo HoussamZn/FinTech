@@ -1,9 +1,12 @@
 import React ,{ useEffect, useState } from "react";
 import axios from "axios";
+
+const EUTHPRICE = import.meta.env.VITE_API_EUTHPRICE;
+
 const Chart2 = () => {
   const [ethStats, setEthStats] = useState(null);
   useEffect(() => {
-    axios.get("http://localhost:8004/eth-stats") 
+    axios.get(EUTHPRICE + "/eth-stats") 
       .then((response) => {
         setEthStats(response.data);
       })

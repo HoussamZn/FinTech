@@ -4,9 +4,9 @@ import Alert from "../Ui/Alert";
 import SyncLoader from "react-spinners/SyncLoader";
 
 
-const GATEAWAY = "http://127.0.0.1:8000/user";
-const ADD_FAVORITE = GATEAWAY + "/favorite";
-const GET_FAVORITES = GATEAWAY + "/favorites";
+const GATEAWAY = import.meta.env.VITE_API_GATEAWAY;
+const ADD_FAVORITE = GATEAWAY + "/user/favorite";
+const GET_FAVORITES = GATEAWAY + "/user/favorites";
 
 
 

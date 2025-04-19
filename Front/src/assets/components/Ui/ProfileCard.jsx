@@ -8,14 +8,7 @@ import { useAuth } from "../../utils/AuthContext";
 
 
 
-const ProfileCard = ({ 
-  name = "John Doe", 
-  jobTitle = "Software Developer", 
-  email = "john.doe@example.com", 
-  bio = "A passionate software developer with a focus on front-end technologies.", 
-  linkedin = "https://www.linkedin.com/in/johndoe", 
-  github = "https://github.com/johndoe",
-  number = '+2126635259159',
+const ProfileCard = ({
 }) => {
 
   const { user,logout } = useAuth();

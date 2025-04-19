@@ -6,11 +6,6 @@ from database import get_db
 from services import get_bank_by_account_number,create_bank,check_balance,add_amount
 
 router = APIRouter()
-BACKENDS = {
-    "user": "http://localhost:8001",
-    "account":"http://localhost:8002",
-    'gateaway': "http://localhost:8000"
-}
 
 @router.get("/")
 def home():

@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+httpx
+bcrypt
+cryptography
+python-jose
+python-multipart
+sqlalchemy
+passlib
+pydantic[email]
+websockets
+numpy
+requests
+pydantic
+confluent-kafka
+psycopg2-binary

@@ -1,0 +1,27 @@
+# Dependency directories
+node_modules
+**/node_modules
+
+# Build output (if you're not using it for build context)
+dist
+build
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local env files (optional, especially if using secrets or external .env)
+.env.*
+
+# Editor/IDE stuff
+.vscode
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore

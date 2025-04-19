@@ -1,0 +1,110 @@
+
+services:
+  gateaway:
+    build: ./backend/gateaway
+    ports:
+      - "8000:8000"
+    environment:
+      USER_SERVICE : http://user_service:8001
+      ACCOUNT_SERVICE : http://account_service:8002
+      BANK_SERVICE : http://bank_service:8003
+
+
+
+  user_service:
+    build: ./backend/user_service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - user_db
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@user_db:5432/user_db
+
+  user_db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: user_db
+    volumes:
+      - user_db:/var/lib/postgresql/data
+
+  account_service:
+    build: ./backend/account_service
+    ports:
+      - "8002:8002"
+    depends_on:
+      - account_db
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@account_db:5432/account_db
+      BANK_SERVICE : http://bank_service:8003
+
+  account_db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: account_db
+    volumes:
+      - account_db:/var/lib/postgresql/data
+
+  bank_service:
+    build: ./backend/bank_service
+    ports:
+      - "8003:8003"
+    depends_on:
+      - bank_db
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@bank_db:5432/bank_db
+
+  bank_db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bank_db
+    volumes:
+      - bank_db:/var/lib/postgresql/data
+
+  eth-price:
+    build: ./backend/eth-price
+    ports:
+      - "8004:8004"
+
+  front:
+    build: ./Front
+    ports:
+      - "3000:80"
+    depends_on:
+      - gateaway
+      - eth-price
+      - account_service
+    networks:
+      - default
+  
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092  # use internal Docker service name
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+
+
+volumes:
+  user_db:
+  account_db:
+  bank_db:

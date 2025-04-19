@@ -4,10 +4,10 @@ import Alert from "../Ui/Alert";
 import SyncLoader from "react-spinners/SyncLoader";
 
 
-const GATEAWAY = "http://127.0.0.1:8000/user";
-const UPDATE_USER = GATEAWAY + "/update";
-const UPDATE_PASS = GATEAWAY + "/password";
-const DELETE_USER = GATEAWAY + "/delete";
+const GATEAWAY = import.meta.env.VITE_API_GATEAWAY;
+const UPDATE_USER = GATEAWAY + "/user/update";
+const UPDATE_PASS = GATEAWAY + "/user/password";
+const DELETE_USER = GATEAWAY + "/user/delete";
 
 
 

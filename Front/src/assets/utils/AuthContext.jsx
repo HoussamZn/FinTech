@@ -1,11 +1,12 @@
 import { createContext, useContext, useState ,useEffect} from "react";
 
 const AuthContext = createContext();
-const GATEAWAY = "http://127.0.0.1:8000";
+
+const GATEAWAY = import.meta.env.VITE_API_GATEAWAY;
 const LOGIN_API = GATEAWAY + "/login";
 const CHECK_API = GATEAWAY + "/verify-token";
 const REGISTER_API = GATEAWAY + "/register";
-//test test
+
 
 
 export const AuthProvider = ({ children }) => {

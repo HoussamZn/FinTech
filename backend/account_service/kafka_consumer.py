@@ -4,7 +4,7 @@ from websocket_manager import manager
 import json
 
 conf = {
-    'bootstrap.servers': 'localhost:9092',
+    'bootstrap.servers': 'kafka:9092',
     'group.id': 'notify-group',
     'auto.offset.reset': 'earliest'
 }

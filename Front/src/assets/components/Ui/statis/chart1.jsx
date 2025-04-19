@@ -8,6 +8,8 @@ const currencies = [
   "usd", "aed", "ars", "aud", "bdt", "bhd", "bmd", "brl", "cad", "chf", "clp", "cny",
   "czk", "pkr"
 ];
+const EUTHPRICE = import.meta.env.VITE_API_EUTHPRICE;
+
 
 const Chart1 = () => {
   const [chartData, setChartData] = useState(null);
@@ -27,7 +29,7 @@ const Chart1 = () => {
 
   useEffect(() => {
     const daysToFetch = timeframeMap[timeframe];
-    axios.get(`http://localhost:8004/eth-prices/${currency}/${daysToFetch}`)
+    axios.get(`${EUTHPRICE}/eth-prices/${currency}/${daysToFetch}`)
       .then((response) => {
         const prices = response.data[0];
         const threshold = response.data[1];

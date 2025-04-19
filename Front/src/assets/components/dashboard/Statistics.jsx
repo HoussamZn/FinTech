@@ -7,8 +7,8 @@ import Web3 from 'web3';
 import Alert from '../Ui/Alert';
 import SyncLoader from 'react-spinners/SyncLoader';
 
-const GATEAWAY = "http://127.0.0.1:8000/user";
-const UPDATE_WALLET = GATEAWAY + "/addwallet";
+const GATEAWAY = import.meta.env.VITE_API_GATEAWAY;
+const UPDATE_WALLET = GATEAWAY + "/user/addwallet";
 
 const Statistics = () => {
   const [walletError, setWalletlError] = useState(null);

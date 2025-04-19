@@ -6,8 +6,8 @@ import { FaPlusCircle } from "react-icons/fa";
 import SyncLoader from "react-spinners/SyncLoader";
 
 
-const GATEAWAY = "http://127.0.0.1:8000/account";
-const GET_ACCOUNTS = GATEAWAY + "/accs";
+const GATEAWAY = import.meta.env.VITE_API_GATEAWAY;
+const GET_ACCOUNTS = GATEAWAY + "/account/accs";
 
 const Cards = () => {
     const authContext = useAuth();

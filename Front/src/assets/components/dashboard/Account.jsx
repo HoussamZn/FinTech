@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { useAuth } from "../../utils/AuthContext";
+import SyncLoader from "react-spinners/SyncLoader";
+import Alert from "../Ui/Alert";
+
+const GATEAWAY = import.meta.env.VITE_API_GATEAWAY;
 
 export default function CreateBankAccount() {
   const authContext = useAuth();
@@ -11,8 +15,9 @@ export default function CreateBankAccount() {
     currency: "",
   });
   
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,15 +25,10 @@ export default function CreateBankAccount() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
-    setError("");
+    setError(null);
+    setLoading(true);
   
     const token = localStorage.getItem("token");
-    if (!token || !user_id) {
-      setError("You are not authenticated. Please log in.");
-      return;
-    }
-  
     const dataToSend = { 
       account_number: formData.accountNumber, 
       name: formData.name, 
@@ -41,7 +41,7 @@ export default function CreateBankAccount() {
     console.log("Sending data:", JSON.stringify(dataToSend));
   
     try {
-      const response = await fetch("http://127.0.0.1:8000/account/acc", {
+      const response = await fetch(GATEAWAY + "/account/acc", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,24 +50,26 @@ export default function CreateBankAccount() {
         body: JSON.stringify(dataToSend),
       });
   
-      const result = await response.json();
+      const data = await response.json();
   
-      if (!response.ok) {
-        throw new Error(result.message || "Something went wrong");
-      }
-  
-      setMessage("Account created successfully!");
-  
-      // Reset form data
-      setFormData({
-        accountNumber: "",
-        name: "",
-        bankName: "",
-        currency: "",
-      });
+      if (response.ok) {
+        setError({type:"success",message:data.message});
+        setFormData({
+          accountNumber: "",
+          name: "",
+          bankName: "",
+          currency: "",
+        });
+      } else {
+        setError({type:"error",message:data.detail});
+        throw new Error(data.detail);
+      }  
+
     } catch (err) {
-      setError(err.message);
+      console.error("Creation failed:", err);
     }
+    setLoading(false);
+
   };
   
 
@@ -110,7 +112,7 @@ export default function CreateBankAccount() {
                 htmlFor="name"
                 className="block text-sm font-medium text-neutral-900 dark:text-neutral-50"
               >
-                Name
+                Alias
               </label>
               <input
                 type="text"
@@ -118,7 +120,7 @@ export default function CreateBankAccount() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="John Doe"
+                placeholder="Main"
                 className="mt-1 block w-full rounded-md bg-neutral-200 dark:bg-neutral-900/80 px-3 py-2 text-base text-neutral-900 dark:text-neutral-50 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                 required
               />
@@ -133,16 +135,18 @@ export default function CreateBankAccount() {
             >
               Bank Name
             </label>
-            <input
-              type="text"
+            <select
               id="bankName"
               name="bankName"
               value={formData.bankName}
               onChange={handleChange}
-              placeholder="BMCE Bank"
               className="mt-1 block w-full rounded-md bg-neutral-200 dark:bg-neutral-900/80 px-3 py-2 text-base text-neutral-900 dark:text-neutral-50 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
               required
-            />
+            >
+              <option value="" disabled>Select a bank</option>
+              <option value="CIH">CIH Bank</option>
+              <option value="TWB">Attijariwafa Bank</option>
+            </select>
           </div>
 
           {/* Currency */}
@@ -153,19 +157,27 @@ export default function CreateBankAccount() {
             >
               Currency
             </label>
-            <input
-              type="text"
+            <select
               id="currency"
               name="currency"
               value={formData.currency}
               onChange={handleChange}
-              placeholder="MAD"
               className="mt-1 block w-full rounded-md bg-neutral-200 dark:bg-neutral-900/80 px-3 py-2 text-base text-neutral-900 dark:text-neutral-50 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
               required
-            />
+            >
+              <option value="" disabled>Select a currency</option>
+              <option value="USD">United States Dollar</option>
+              <option value="MAD">Moroccan Dirham</option>
+            </select>
           </div>
 
           {/* Submit button */}
+          {error && <Alert variant={error.type} title={error.type} message={error.message} duration={3000} />}
+          {loading && 
+              <div className="flex justify-center items-center">
+                  <SyncLoader color="#4f39f6" size={10} />
+              </div>
+          }
           <div>
             <button
               type="submit"
@@ -174,10 +186,6 @@ export default function CreateBankAccount() {
               Create Account
             </button>
           </div>
-
-          {/* Feedback */}
-          {message && <p className="text-green-600 font-semibold">{message}</p>}
-          {error && <p className="text-red-500 font-medium">{error}</p>}
         </form>
       </div>
     </div>
