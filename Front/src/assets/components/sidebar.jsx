@@ -57,7 +57,7 @@ export default function SideBar({side,setSide}) {
       <div className="flex mb-10 justify-center">
         <a href="/">
           <h1 className="text-2xl font-semibold tracking-tight text-balance duration-200 hover:text-indigo-400 dark:hover:text-indigo-300 text-indigo-600 dark:text-indigo-500">
-            Finetech
+            Fintech
           </h1>
         </a>
       </div>
@@ -104,7 +104,7 @@ export default function SideBar({side,setSide}) {
                 {/* logo button */}
                 <a href="/" className="-m-1.5 p-1.5">
                   <h1 className="text-2xl font-semibold tracking-tight text-balance duration-200 hover:text-indigo-400 dark:hover:text-indigo-300 text-indigo-600 dark:text-indigo-500">
-                    Finetech
+                    Fintech
                   </h1>
                 </a>
                 {/* close button */}
