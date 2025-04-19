@@ -127,10 +127,10 @@ export default function Transactions() {
                 {/* left section*/}
                 <div className="flex flex-col w-full sm:w-1/3">
                     <h1 className="text-base font-semibold tracking-tight text-balance text-neutral-900 dark:text-neutral-50 ">
-                    Sender
+                    Your accounts
                     </h1>
                     <p className=" text-sm font-medium text-pretty text-neutral-400 dark:text-neutral-500">
-                    Manage your transactions history.
+                    Select the account you want to use for the transaction
                     </p>
                 </div>
                 {/* Right section*/}
@@ -176,7 +176,7 @@ export default function Transactions() {
                     Receiver
                     </h1>
                     <p className=" text-sm font-medium text-pretty text-neutral-400 dark:text-neutral-500">
-                    Manage your transactions history.
+                    Select the account you want to make the transaction to
                     </p>
                 </div>
                 {/* Right section*/}
@@ -190,7 +190,7 @@ export default function Transactions() {
                     Transaction
                     </h1>
                     <p className=" text-sm font-medium text-pretty text-neutral-400 dark:text-neutral-500">
-                    Use a permanent address where you can receive mail.
+                    Fill in the form to make the transaction
                     </p>
                 </div>
                 {/* Right section*/}

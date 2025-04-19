@@ -151,10 +151,10 @@ export default function Settings() {
                 {/* left section*/}
                 <div className="flex flex-col w-full sm:w-1/3">
                     <h1 className="text-base font-semibold tracking-tight text-balance text-neutral-900 dark:text-neutral-50 ">
-                    Personal Information
+                    Personal Informations
                     </h1>
                     <p className=" text-sm font-medium text-pretty text-neutral-400 dark:text-neutral-500">
-                    Use a permanent address where you can receive mail.
+                    Fill in the form to update ur personal informations keep a field as it is if you don't want to update it
                     </p>
                 </div>
                 {/* Right section*/}

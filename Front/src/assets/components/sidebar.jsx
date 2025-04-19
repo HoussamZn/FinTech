@@ -1,36 +1,25 @@
 import { useState,useEffect } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { IoHomeSharp } from "react-icons/io5";
 import { Link ,useLocation} from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 import ThemeSwitch from './Ui/themeSwitch'
 import { useAuth } from "../utils/AuthContext";
-
-
 import { LuBox } from "react-icons/lu"; 
-
 import { IoSettingsOutline } from "react-icons/io5";
 import { TbTransactionBitcoin } from "react-icons/tb";
-import { GoBell } from "react-icons/go";
 import { TbPresentationAnalytics } from "react-icons/tb";
-import { MdOutlineAccountCircle } from "react-icons/md";
+import { FaCreditCard } from "react-icons/fa";
+import { FaEthereum } from "react-icons/fa";
+
+
 import logo from "../images/logo.png";
-
-
-const navigation = [
-  { name: 'Dashboard', href: '/dash' },
-  { name: 'Statistics', href: '/dash/statis' },
-  { name: 'Transactions', href: '/dash/transactions' },
-  { name: 'Account', href: '/dash/Account' },
-  { name: 'Setting', href: '/dash/settings' },
-]
 
 const SIDEBAR_LINKS = [
   { id: 1, path: "/dash", name: "Dashboard", icon: LuBox }, 
-  { id: 2, path: "/dash/statis", name: "Statistics", icon: TbPresentationAnalytics }, 
+  { id: 2, path: "/dash/statis", name: "Wallet", icon: FaEthereum }, 
   { id: 3, path: "/dash/transactions", name: "Transaction", icon: TbTransactionBitcoin }, 
-  { id: 4, path: "/dash/Account", name: "Account", icon: MdOutlineAccountCircle  }, 
+  { id: 4, path: "/dash/Account", name: "Bank Account", icon: FaCreditCard}, 
   { id: 5, path: "/dash/settings", name: "Settings", icon: IoSettingsOutline }, 
 ];
 
@@ -67,8 +56,9 @@ export default function SideBar({side,setSide}) {
       {/* logo */}
       <div className="flex mb-10 justify-center">
         <a href="/">
-          <img  src={logo} alt="logo" className="w-15 hidden md:flex duration-1000 hover:rotate-360" />
-          <img  src={logo} alt="logo" className="w-8 flex md:hidden" />
+          <h1 className="text-2xl font-semibold tracking-tight text-balance duration-200 hover:text-indigo-400 dark:hover:text-indigo-300 text-indigo-600 dark:text-indigo-500">
+            Finetech
+          </h1>
         </a>
       </div>
 
@@ -112,13 +102,10 @@ export default function SideBar({side,setSide}) {
             {/* header */}
             <div className="flex items-center justify-between">
                 {/* logo button */}
-                <a href="#" className="-m-1.5 p-1.5">
-                    <span className="sr-only">Your Company</span>
-                    <img
-                        alt=""
-                        src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                        className="h-8 w-auto"
-                    />
+                <a href="/" className="-m-1.5 p-1.5">
+                  <h1 className="text-2xl font-semibold tracking-tight text-balance duration-200 hover:text-indigo-400 dark:hover:text-indigo-300 text-indigo-600 dark:text-indigo-500">
+                    Finetech
+                  </h1>
                 </a>
                 {/* close button */}
                 <button
@@ -146,19 +133,6 @@ export default function SideBar({side,setSide}) {
                         </a>
                       ))}
 
-                      <a
-                        href="/dash"
-                        className="-mx-3 flex justify-center rounded-lg px-3 py-2 text-base/7 font-semibold duration-200 text-neutral-900 dark:text-neutral-50 hover:text-indigo-600 hover:-translate-y-0.5"
-                        >
-                        Profile
-                      </a>
-
-                      <a
-                        href="/dash"
-                        className="-mx-3 flex justify-center rounded-lg px-3 py-2 text-base/7 font-semibold duration-200 text-neutral-900 dark:text-neutral-50 hover:text-indigo-600 hover:-translate-y-0.5"
-                        >
-                        Notification
-                      </a>
                     </div>
 
                     {/* Login button */}

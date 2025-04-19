@@ -50,20 +50,18 @@ const Transaction = () => {
     };
 
   return (
-    <div className="w-full h-full bg-neutral-100 dark:bg-neutral-800 rounded-2xl shadow-xl p-6 flex flex-col">
+    <div className="w-full h-full bg-neutral-100 dark:bg-neutral-800 rounded-lg shadow-xl p-6 flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-gray-800 dark:text-white">Transactions</h3>
+        <h3 className="text-xl font-bold text-gray-800 dark:text-white">Transactions History</h3>
         
       </div>
 
     
       {transactionsLoading ? (
-        <div className="text-center text-gray-500 dark:text-gray-300 italic">
-          <div className="flex justify-center items-center">
+          <div className="flex h-full flex-col justify-center items-center">
             <SyncLoader color="#4f39f6" size={10} />
           </div>
-        </div>
       ) : transactions.length === 0 ? (
         <p className="text-center text-gray-500 dark:text-gray-300 italic">No transactions found.</p>
       ) : (
@@ -71,7 +69,7 @@ const Transaction = () => {
           {transactions.map((transaction) => (
             <div
               key={transaction.id}
-              className="flex justify-between items-center p-4 bg-indigo-100/60 backdrop-blur-md rounded-xl text-white"
+              className="flex justify-between items-center p-4 bg-indigo-100/60 dark:bg-neutral-900/60 backdrop-blur-md rounded-xl text-white"
             >
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 text-sm">

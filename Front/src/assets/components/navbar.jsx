@@ -19,8 +19,7 @@ const navigation = [
 
 //login
 const navigationLeft = [
-    { name: 'Dashboard', href: '/dash' },
-    { name: 'Notification', href: '/dash' },
+    { name: 'Dashboard', href: '/dash' }
 ]
 
 
@@ -69,7 +68,9 @@ function Navbar({isNotHero, isOpen,setIsOpen,setSide ,inLogin , setInLogin}) {
             {/* logo */}
             <div className="flex lg:flex-1">
                 <a href="/" className="-m-1.5 p-1.5">
-                <PiPiggyBankFill  className='text-indigo-600 h-8 w-auto duration-600 hover:rotate-[-360deg] '/>
+                    <h1 className="text-2xl font-semibold tracking-tight text-balance duration-200 hover:text-indigo-400 dark:hover:text-indigo-300 text-indigo-600 dark:text-indigo-500">
+                        Finetech
+                    </h1>
                 </a>
             </div>
 
@@ -159,12 +160,9 @@ function Navbar({isNotHero, isOpen,setIsOpen,setSide ,inLogin , setInLogin}) {
                     <div className="flex items-center justify-between">
                         {/* logo button */}
                         <a href="#" className="-m-1.5 p-1.5">
-                            <span className="sr-only">Your Company</span>
-                            <img
-                                alt=""
-                                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                                className="h-8 w-auto"
-                            />
+                        <h1 className="text-2xl font-semibold tracking-tight text-balance duration-200 hover:text-indigo-400 dark:hover:text-indigo-300 text-indigo-600 dark:text-indigo-500">
+                            Finetech
+                        </h1>
                         </a>
                         {/* close button */}
                         <button

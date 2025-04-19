@@ -82,7 +82,7 @@ export default function CreateBankAccount() {
             Create Bank Account
           </h1>
           <p className="text-sm font-medium text-neutral-400 dark:text-neutral-500">
-            Fill in the form to add a new bank account to the system.
+            Fill in the form to add a new bank account to your account.
           </p>
         </div>
         <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-6">
