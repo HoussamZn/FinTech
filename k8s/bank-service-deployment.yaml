@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-service
+  template:
+    metadata:
+      labels:
+        app: bank-service
+    spec:
+      containers:
+        - name: bank-service
+          image: houssamzitan/fintech-bank_service:latest
+          ports:
+            - containerPort: 8003
+          env:
+            - name: DATABASE_URL
+              value: postgresql://postgres:postgres@bank-db:5432/bank_db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-service
+spec:
+  type: ClusterIP
+  selector:
+    app: bank-service
+  ports:
+    - port: 8003
+      targetPort: 8003

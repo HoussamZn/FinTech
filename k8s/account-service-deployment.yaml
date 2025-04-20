@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-service
+  template:
+    metadata:
+      labels:
+        app: account-service
+    spec:
+      containers:
+        - name: account-service
+          image: houssamzitan/fintech-account_service:latest
+          ports:
+            - containerPort: 8002
+          env:
+            - name: DATABASE_URL
+              value: postgresql://postgres:postgres@account-db:5432/account_db
+            - name: BANK_SERVICE
+              value: http://bank-service:8003
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-service
+spec:
+  type: ClusterIP
+  selector:
+    app: account-service
+  ports:
+    - port: 8002
+      targetPort: 8002

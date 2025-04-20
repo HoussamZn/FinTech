@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bank-db-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-db
+  template:
+    metadata:
+      labels:
+        app: bank-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: bank_db
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: bank-db-storage
+      volumes:
+        - name: bank-db-storage
+          persistentVolumeClaim:
+            claimName: bank-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-db
+spec:
+  type: ClusterIP
+  selector:
+    app: bank-db
+  ports:
+    - port: 5432
+      targetPort: 5432

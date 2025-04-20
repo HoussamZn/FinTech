@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateaway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateaway
+  template:
+    metadata:
+      labels:
+        app: gateaway
+    spec:
+      containers:
+        - name: gateaway
+          image: houssamzitan/fintech-gateaway:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: USER_SERVICE
+              value: "http://user-service:8001"
+            - name: ACCOUNT_SERVICE
+              value: "http://account-service:8002"
+            - name: BANK_SERVICE
+              value: "http://bank-service:8003"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateaway
+spec:
+  selector:
+    app: gateaway
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP
