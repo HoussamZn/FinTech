@@ -34,7 +34,7 @@ pipeline {
 
         stage('Login to Docker Hub') {
             steps {
-                sh "echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_CREDENTIALS_USR} --password-stdin"
+                bat "echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_CREDENTIALS_USR} --password-stdin"
             }
         }
 
@@ -43,7 +43,7 @@ pipeline {
                 script {
                     def services = ["gateaway", "user_service", "account_service", "bank_service", "eth-price", "front"]
                     for (svc in services) {
-                        sh "docker push ${DOCKER_HUB_USER}/${svc}:latest"
+                        bat "docker push ${DOCKER_HUB_USER}/${svc}:latest"
                     }
                 }
             }
