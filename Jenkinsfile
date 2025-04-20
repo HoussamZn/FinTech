@@ -26,7 +26,7 @@ pipeline {
                     ]
 
                     for (svc in services) {
-                        bat "docker build -t ${DOCKER_HUB_USER}/fintech/${svc.name}:latest ${svc.path}"
+                        bat "docker build -t ${DOCKER_HUB_USER}/fintech-${svc.name}:latest ${svc.path}"
                     }
                 }
             }
@@ -43,7 +43,7 @@ pipeline {
                 script {
                     def services = ["gateaway", "user_service", "account_service", "bank_service", "eth-price", "front"]
                     for (svc in services) {
-                        bat "docker push ${DOCKER_HUB_USER}/fintech/${svc}:latest"
+                        bat "docker push ${DOCKER_HUB_USER}/fintech-${svc}:latest"
                     }
                 }
             }
