@@ -22,9 +22,7 @@ const Statistics = () => {
 
   useEffect(() => {
     const checkAccounts = async () => {
-      try {
-        console.log("sdddddddddd");
-        
+      try {        
         
         if (window.ethereum) {
           const web3 = new Web3(window.ethereum);
