@@ -26,7 +26,7 @@ pipeline {
                     ]
 
                     for (svc in services) {
-                        bat "docker build -t ${DOCKER_HUB_USER}/${svc.name}:latest ${svc.path}"
+                        bat "docker build -t ${DOCKER_HUB_USER}/fintech/${svc.name}:latest ${svc.path}"
                     }
                 }
             }
