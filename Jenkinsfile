@@ -43,7 +43,7 @@ pipeline {
                 script {
                     def services = ["gateaway", "user_service", "account_service", "bank_service", "eth-price", "front"]
                     for (svc in services) {
-                        bat "docker push ${DOCKER_HUB_USER}/${svc}:latest"
+                        bat "docker push ${DOCKER_HUB_USER}/fintech/${svc}:latest"
                     }
                 }
             }
