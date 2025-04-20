@@ -12,8 +12,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Local env files (optional, especially if using secrets or external .env)
-.env.*
 
 # Editor/IDE stuff
 .vscode
