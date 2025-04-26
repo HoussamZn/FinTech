@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .env.docker
+nginx.conf.old
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
